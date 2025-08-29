@@ -1,4 +1,4 @@
-import { init } from "next/dist/compiled/webpack/webpack";
+"use client"
 
 export interface DataSourceSetupContext {
   meta: { from: number; to: number };
