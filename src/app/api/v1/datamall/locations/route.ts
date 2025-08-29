@@ -1,3 +1,8 @@
+const ONE_SECOND = 1;
+const ONE_MINUTE = 60 * ONE_SECOND;
+const ONE_HOUR = 60 * ONE_MINUTE;
+const ONE_DAY = 24 * ONE_HOUR;
+
 export async function GET(request: Request) {
   const skipParam = new URL(request.url).searchParams.get("$skip");
   const target = new URL(
@@ -13,7 +18,7 @@ export async function GET(request: Request) {
       accept: "application/json",
     },
     next: {
-      revalidate: 30 * 7 * 24 * 60 * 60,
+      revalidate: 30 * ONE_DAY,
     },
   });
 }
