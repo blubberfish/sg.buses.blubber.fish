@@ -38,6 +38,19 @@ function DataMallProvider({ children }: React.PropsWithChildren) {
           keyPath: "catalog",
         });
       }
+
+      if (meta.from < 2) {
+        const serviceStore = database.createObjectStore(
+          DataClient.STORE_SERVICE,
+          {
+            keyPath: ["ServiceNo"],
+          }
+        );
+
+        const routeStore = database.createObjectStore(DataClient.STORE_ROUTES, {
+          keyPath: ["ServiceNo", "BusStopCode", "Direction", "StopSequence"],
+        });
+      }
     };
     DataClient.instance.addEventListener(
       DataClient.EVENT_REQUIRES_SETUP,

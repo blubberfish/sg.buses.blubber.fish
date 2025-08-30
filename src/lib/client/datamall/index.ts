@@ -22,7 +22,7 @@ export class DataClient extends EventTarget {
   static readonly STORE_META = "meta";
 
   static get VERSION() {
-    return 1;
+    return 2;
   }
   static get NAMESPACE() {
     return "datamall@blubber.fish";

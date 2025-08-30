@@ -6,15 +6,15 @@ import { useDataMall } from "./datamall-provider";
 import { STATE, usePageContext } from "./page-context";
 
 async function loadChunk(
-  onData: { (data: DataMall.BusStopInfo[]): Promise<void> },
+  onData: { (data: DataMall.BusServiceInfo[]): Promise<void> },
   offset = 0
 ) {
-  const url = new URL("/api/v1/datamall/locations", document.location.href);
+  const url = new URL("/api/v1/datamall/services", document.location.href);
   url.searchParams.set("$skip", offset.toFixed(0));
   const response = await fetch(url);
   if (response.ok) {
     const { value } = (await response.json()) as {
-      value: DataMall.BusStopInfo[];
+      value: DataMall.BusServiceInfo[];
     };
     const size = value.length;
     if (size) {
@@ -26,7 +26,7 @@ async function loadChunk(
   return;
 }
 
-function LocationsLoader() {
+function BusServicesLoader() {
   const client = useDataMall();
   const { set } = usePageContext();
 
@@ -36,7 +36,7 @@ function LocationsLoader() {
       .queryCatalog<{ catalog: string; lastModified: number }>(
         client.STORE_META,
         {
-          only: client.STORE_LOCATIONS,
+          only: client.STORE_SERVICE,
         }
       )
       .then((meta) => {
@@ -46,19 +46,19 @@ function LocationsLoader() {
         return loadChunk(async (data) => {
           await Promise.all(
             data.map((datum) => {
-              client.mutateCatalog(client.STORE_LOCATIONS, datum);
+              client.mutateCatalog(client.STORE_SERVICE, datum);
             })
           );
         }).then(() => {
           client.mutateCatalog(client.STORE_META, {
-            catalog: client.STORE_LOCATIONS,
+            catalog: client.STORE_SERVICE,
             lastModified: Date.now(),
           });
         });
       })
       .finally(() => {
         if (abort) return;
-        set("busStopLoctions", STATE.READY);
+        set("busServices", STATE.READY);
       });
     return () => {
       abort = true;
@@ -68,10 +68,10 @@ function LocationsLoader() {
   return null;
 }
 
-export default function LocationsLoaderWrapper() {
+export default function BusServiceWrapper() {
   return (
     <Suspense>
-      <LocationsLoader />
+      <BusServicesLoader />
     </Suspense>
   );
 }
