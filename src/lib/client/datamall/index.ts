@@ -1,9 +1,14 @@
-"use client"
+"use client";
 
-export interface DataSourceSetupContext {
-  meta: { from: number; to: number };
-  database: IDBDatabase;
-}
+import type { DataSourceSetupContext } from "./types";
+import { UPGRADE_LOG } from "./upgrades";
+
+export {
+  DataStore,
+  LocationsDataStoreIndex,
+  RoutesataStoreIndex,
+  ServicesDataStoreIndex,
+} from "./types";
 
 export class DataClient extends EventTarget {
   static instance = new DataClient();
@@ -12,15 +17,6 @@ export class DataClient extends EventTarget {
 
   static readonly EVENT_READY = "datasource.ready";
 
-  static readonly STORE_LOCATIONS = "locations";
-  static readonly INDEX_LOCATIONS_POSITION = "by.lnglat";
-
-  static readonly STORE_ROUTES = "routes";
-
-  static readonly STORE_SERVICE = "services";
-
-  static readonly STORE_META = "meta";
-
   static get VERSION() {
     return 2;
   }
@@ -28,36 +24,10 @@ export class DataClient extends EventTarget {
     return "datamall@blubber.fish";
   }
 
-  get STORE_LOCATIONS() {
-    return DataClient.STORE_LOCATIONS;
-  }
-  get INDEX_LOCATIONS_POSITION() {
-    return DataClient.INDEX_LOCATIONS_POSITION;
-  }
-
-  get STORE_ROUTES() {
-    return DataClient.STORE_ROUTES;
-  }
-
-  get STORE_SERVICE() {
-    return DataClient.STORE_SERVICE;
-  }
-
-  get STORE_META() {
-    return DataClient.STORE_META;
-  }
+  #source: Promise<IDBDatabase>;
 
   constructor() {
     super();
-  }
-
-  init() {
-    return this.source;
-  }
-
-  #source?: Promise<IDBDatabase>;
-  get source(): Promise<IDBDatabase> {
-    if (this.#source) return this.#source;
     this.#source = new Promise<IDBDatabase>((resolve, reject) => {
       const request = indexedDB.open(DataClient.NAMESPACE, DataClient.VERSION);
       request.onsuccess = () => {
@@ -68,24 +38,29 @@ export class DataClient extends EventTarget {
         reject(request.error);
       };
       request.onupgradeneeded = ({ newVersion, oldVersion }) => {
+        const context: DataSourceSetupContext = {
+          meta: { from: oldVersion, to: newVersion || 1 },
+          database: request.result,
+        };
+        UPGRADE_LOG.forEach(({ rule, worker }) => {
+          if (rule(context)) {
+            worker(context);
+          }
+        });
         this.dispatchEvent(
           new CustomEvent<DataSourceSetupContext>(
             DataClient.EVENT_REQUIRES_SETUP,
             {
-              detail: {
-                meta: { from: oldVersion, to: newVersion || 1 },
-                database: request.result,
-              },
+              detail: context,
             }
           )
         );
       };
     });
-    return this.#source;
   }
 
   set onready(callback: { (database: IDBDatabase): Promise<void> }) {
-    this.source.then(callback);
+    this.#source.then(callback);
   }
 
   queryCatalog<T>(name: string, query: { only: IDBValidKey }): Promise<T>;
@@ -107,7 +82,7 @@ export class DataClient extends EventTarget {
           limit?: number;
         }
   ) {
-    const database = await this.source;
+    const database = await this.#source;
     return new Promise<unknown>((resolve, reject) => {
       const transaction = database.transaction([name], "readonly");
       if (query && "only" in query) {
@@ -148,7 +123,7 @@ export class DataClient extends EventTarget {
   }
 
   async mutateCatalog<T = unknown>(name: string, data: T) {
-    const database = await this.source;
+    const database = await this.#source;
     return new Promise<void>((resolve, reject) => {
       const transaction = database.transaction([name], "readwrite");
       const request = transaction.objectStore(name).put(data);

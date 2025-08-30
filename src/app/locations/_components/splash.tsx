@@ -1,23 +1,23 @@
 "use client";
 
 import { CheckCircle, Loader } from "@deemlol/next-icons";
-import { usePageContext } from "@/lib/client/components/page-context";
+import { useDataContext } from "@/lib/client/components/datamall";
 import Spinner from "@/lib/components/spinner";
 import React from "react";
 
 export default function SplashScreen({ children }: React.PropsWithChildren) {
-  const { busRoutes, busServices, busStopLoctions } = usePageContext();
+  const { locations, routes, services } = useDataContext();
 
-  if (!busRoutes || !busStopLoctions) {
+  if (!locations || !routes || !services) {
     return (
       <div className="w-full h-[calc(100svh-theme(spacing.16))]">
         <div className="w-max mx-auto mt-16">
           <Spinner />
         </div>
         <div className="mt-16 grid grid-cols-[repeat(2,max-content)] auto-rows-min justify-center gap-4">
-          <Row loading={!busStopLoctions} label="Bus stop locations" />
-          <Row loading={!busServices} label="Bus service informations" />
-          <Row loading={!busRoutes} label="Route information" />
+          <Row loading={!locations} label="Bus stop locations" />
+          <Row loading={!services} label="Bus service informations" />
+          <Row loading={!routes} label="Route information" />
         </div>
       </div>
     );
@@ -29,7 +29,11 @@ export default function SplashScreen({ children }: React.PropsWithChildren) {
 function Row({ label, loading }: { loading?: boolean; label: string }) {
   return (
     <div className="col-span-full grid grid-cols-subgrid gap-4 items-center">
-      {loading ? <Loader className="text-violet-400 animate-pulse" /> : <CheckCircle className="stroke-emerald-500" />}
+      {loading ? (
+        <Loader className="text-violet-400 animate-pulse" />
+      ) : (
+        <CheckCircle className="stroke-emerald-500" />
+      )}
       <p>{label}</p>
     </div>
   );

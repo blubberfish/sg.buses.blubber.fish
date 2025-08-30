@@ -1,8 +1,10 @@
-"use client"
+"use client";
 
+import { DataStore } from "@/lib/client/datamall";
 import {
   createContext,
   type PropsWithChildren,
+  Suspense,
   useCallback,
   useContext,
   useState,
@@ -15,13 +17,11 @@ export const STATE = {
 
 type StateType = (typeof STATE)[keyof typeof STATE];
 
-interface DataState {
-  busRoutes?: StateType;
-  busServices?: StateType;
-  busStopLoctions?: StateType;
-}
+type DataState = {
+  [key in DataStore]?: StateType;
+};
 
-interface PageContext extends DataState {
+interface DataContext extends DataState {
   set: {
     (data: keyof DataState, state: StateType): void;
   };
@@ -33,7 +33,7 @@ interface PageContext extends DataState {
   };
 }
 
-const Context = createContext<PageContext>({
+const Context = createContext<DataContext>({
   set() {
     throw new Error("Missing page context");
   },
@@ -45,9 +45,9 @@ const Context = createContext<PageContext>({
   },
 });
 
-export default function PageContext({ children }: PropsWithChildren) {
+function Provider({ children }: PropsWithChildren) {
   const [state, setState] = useState<DataState>({});
-  const set: PageContext["set"] = useCallback((data, state) => {
+  const set: DataContext["set"] = useCallback((data, state) => {
     setState((current) => ({
       ...current,
       [data]: state,
@@ -68,6 +68,14 @@ export default function PageContext({ children }: PropsWithChildren) {
   );
 }
 
-export function usePageContext() {
+export function DataContext(props: PropsWithChildren) {
+  return (
+    <Suspense>
+      <Provider {...props} />
+    </Suspense>
+  );
+}
+
+export function useDataContext() {
   return useContext(Context);
 }

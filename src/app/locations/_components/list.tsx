@@ -1,6 +1,7 @@
 "use client";
 
-import { useDataMall } from "@/lib/client/components/datamall-provider";
+import { useDataMall } from "@/lib/client/components/datamall";
+import { DataStore } from "@/lib/client/datamall";
 import { Suspense, useEffect, useRef, useState } from "react";
 
 const CHUNK_SIZE = 25;
@@ -8,7 +9,9 @@ const CHUNK_SIZE = 25;
 const SKELETON = new Array(CHUNK_SIZE).fill(null).map((_, i) => (
   <div className="col-span-full grid grid-cols-subgrid px-6 py-1 gap-6" key={i}>
     <div className="w-full bg-gray-400 rounded animate-pulse">&nbsp;</div>
-    <div className="w-full min-w-[8ch] bg-gray-400 rounded animate-pulse">&nbsp;</div>
+    <div className="w-full min-w-[8ch] bg-gray-400 rounded animate-pulse">
+      &nbsp;
+    </div>
   </div>
 ));
 
@@ -20,7 +23,7 @@ function List() {
   const [loading, setLoadingState] = useState<
     ReturnType<(typeof client)["queryCatalog"]> | undefined
   >(
-    client.queryCatalog<DataMall.BusStopInfo>(client.STORE_LOCATIONS, {
+    client.queryCatalog<DataMall.BusStopInfo>(DataStore.Locations, {
       limit: CHUNK_SIZE,
       startFrom: startToken,
     })
@@ -66,13 +69,10 @@ function List() {
         <Trigger
           onTrigger={() => {
             setLoadingState(
-              client.queryCatalog<DataMall.BusStopInfo>(
-                client.STORE_LOCATIONS,
-                {
-                  limit: CHUNK_SIZE,
-                  startFrom: startToken,
-                }
-              )
+              client.queryCatalog<DataMall.BusStopInfo>(DataStore.Locations, {
+                limit: CHUNK_SIZE,
+                startFrom: startToken,
+              })
             );
           }}
         />
