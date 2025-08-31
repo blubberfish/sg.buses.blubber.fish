@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { DataClient, DataStore } from "@/lib/client/datamall";
 import { ONE_DAY } from "@/lib/constants";
@@ -11,11 +11,11 @@ export interface ChunkLoader {
 }
 
 export interface DataStoreLoader {
-  (store: DataStore, loader: ChunkLoader): Promise<void>;
+  (store: DataStore, loader: ChunkLoader, context: DataClient): Promise<void>;
 }
 
-export const loadStore: DataStoreLoader = async (store, loader) =>
-  DataClient.instance
+export const loadStore: DataStoreLoader = async (store, loader, context) =>
+  context
     .queryCatalog<{ catalog: DataStore; lastModified: number }>(
       DataStore.Meta,
       {
@@ -27,10 +27,10 @@ export const loadStore: DataStoreLoader = async (store, loader) =>
       if (skip) return;
       return loader(async (data) => {
         await Promise.all(
-          data.map((datum) => DataClient.instance.mutateCatalog(store, datum))
+          data.map((datum) => context.mutateCatalog(store, datum))
         );
       }).then(() => {
-        DataClient.instance.mutateCatalog(DataStore.Meta, {
+        context.mutateCatalog(DataStore.Meta, {
           catalog: store,
           lastModified: Date.now(),
         });

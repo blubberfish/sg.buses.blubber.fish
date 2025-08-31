@@ -1,6 +1,6 @@
 "use client";
 
-import { useDataMall } from "@/lib/client/components/datamall";
+import { useDataMall } from "@/lib/client/components/datamall/contexts/client";
 import { DataStore } from "@/lib/client/datamall";
 import { Suspense, useEffect, useRef, useState } from "react";
 

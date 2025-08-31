@@ -1,7 +1,7 @@
 "use client";
 
 import { CheckCircle, Loader } from "@deemlol/next-icons";
-import { useDataContext } from "@/lib/client/components/datamall";
+import { useDataContext } from "@/lib/client/components/datamall/contexts/data";
 import Spinner from "@/lib/components/spinner";
 import React from "react";
 

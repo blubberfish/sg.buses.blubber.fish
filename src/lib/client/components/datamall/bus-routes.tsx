@@ -2,7 +2,8 @@
 
 import { DataStore } from "@/lib/client/datamall";
 import React, { Suspense, useEffect } from "react";
-import { STATE, useDataContext, useDataMall } from "./contexts";
+import { useDataMall } from "./contexts/client";
+import { STATE, useDataContext } from "./contexts/data";
 import { ChunkLoader, loadStore } from "./utils";
 
 function BusRoutesLoader() {
@@ -31,7 +32,7 @@ function BusRoutesLoader() {
       }
       return;
     };
-    loadStore(DataStore.Routes, loader).finally(() => {
+    loadStore(DataStore.Routes, loader, client).finally(() => {
       if (abort) return;
       set(DataStore.Routes, STATE.READY);
     });

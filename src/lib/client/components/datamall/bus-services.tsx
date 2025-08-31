@@ -2,7 +2,8 @@
 
 import { DataStore } from "@/lib/client/datamall";
 import React, { Suspense, useEffect } from "react";
-import { STATE, useDataContext, useDataMall } from "./contexts";
+import { useDataMall } from "./contexts/client";
+import { STATE, useDataContext } from "./contexts/data";
 import { ChunkLoader, loadStore } from "./utils";
 
 function BusServicesLoader() {
@@ -11,10 +12,7 @@ function BusServicesLoader() {
 
   useEffect(() => {
     let abort = false;
-    const loader: ChunkLoader = async (
-      onData,
-      offset = 0
-    ) => {
+    const loader: ChunkLoader = async (onData, offset = 0) => {
       const url = new URL("/api/v1/datamall/services", document.location.href);
       url.searchParams.set("$skip", offset.toFixed(0));
       const response = await fetch(url);
@@ -31,7 +29,7 @@ function BusServicesLoader() {
       }
       return;
     };
-    loadStore(DataStore.Services, loader).finally(() => {
+    loadStore(DataStore.Services, loader, client).finally(() => {
       if (abort) return;
       set(DataStore.Services, STATE.READY);
     });
