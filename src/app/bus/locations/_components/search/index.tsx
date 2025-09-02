@@ -2,12 +2,10 @@ import { Search, X } from "@deemlol/next-icons";
 import { Section } from "../section";
 import { useActionState } from "react";
 import { searchPlaces } from "@/lib/server/actions/search-places";
-import { useRouter } from "next/navigation";
 
 export function Seach() {
   const [state, action, pending] = useActionState(searchPlaces, {});
   const suggestions = state.result?.result;
-  const router = useRouter();
 
   return (
     <Section title="Find bus stops">
