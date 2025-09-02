@@ -42,9 +42,15 @@ export interface SearchPlacesState {
 
 export async function searchPlaces(
   prevState: unknown,
-  formData?: FormData | null
+  formData: FormData
 ): Promise<SearchPlacesState> {
-  if (!formData) {
+  const action = formData.get("action");
+
+  if (!action) {
+    return {};
+  }
+
+  if (action === "reset") {
     return {};
   }
 
