@@ -2,10 +2,12 @@ import { Search, X } from "@deemlol/next-icons";
 import { Section } from "../section";
 import { useActionState } from "react";
 import { searchPlaces } from "@/lib/server/actions/search-places";
+import { useRouter } from "next/navigation";
 
 export function Seach() {
   const [state, action, pending] = useActionState(searchPlaces, {});
   const suggestions = state.result?.result;
+  const router = useRouter();
 
   return (
     <Section title="Find bus stops">
@@ -55,12 +57,18 @@ export function Seach() {
               PlaceId,
               Place: { Label, Municipality },
             } = place;
+            const url = new URL(document.location.href);
+            url.searchParams.set("filterBy", "address");
+            url.searchParams.set("address", btoa(JSON.stringify(place)));
             return (
               <li
                 className="p-3 bg-neutral-900 border-b-2 border-b-gray-600"
                 key={PlaceId}
               >
-                <a className="cursor-pointer text-emerald-300 hover:underline">
+                <a
+                  className="cursor-pointer text-emerald-300 hover:underline"
+                  href={url.href}
+                >
                   <h3>{Label}</h3>
                 </a>
                 <aside className="text-sm text-gray-400">{Municipality}</aside>
