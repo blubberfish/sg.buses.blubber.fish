@@ -10,8 +10,8 @@ export default function SplashScreen({ children }: React.PropsWithChildren) {
 
   if (!locations || !routes || !services) {
     return (
-      <div className="w-full h-[calc(100svh-theme(spacing.16))]">
-        <div className="w-max mx-auto mt-16">
+      <>
+        <div className="w-max mx-auto pt-16">
           <Spinner />
         </div>
         <div className="mt-16 grid grid-cols-[repeat(2,max-content)] auto-rows-min justify-center gap-4">
@@ -19,7 +19,7 @@ export default function SplashScreen({ children }: React.PropsWithChildren) {
           <Row loading={!services} label="Bus service informations" />
           <Row loading={!routes} label="Route information" />
         </div>
-      </div>
+      </>
     );
   }
 

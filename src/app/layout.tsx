@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Link, NavGroup } from "./_components/nav";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -7,7 +8,6 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
-  appHeader,
   children,
 }: Readonly<{
   appHeader: React.ReactNode;
@@ -17,7 +17,10 @@ export default function RootLayout({
     <html lang="en">
       <body className="min-h-svh w-screen bg-neutral-900 text-white/80">
         <div className="w-full max-w-md min-h-svh mx-auto bg-neutral-800">
-          {appHeader}
+          <header className="w-full h-16"></header>
+          <NavGroup>
+            <Link path="/bus">Bus</Link>
+          </NavGroup>
           {children}
         </div>
       </body>
