@@ -2,19 +2,12 @@
 
 import { useDataMall } from "@/lib/client/components/datamall/contexts/client";
 import { DataStore } from "@/lib/client/datamall";
-import { Suspense, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Section } from "../section";
+import { Star } from "@deemlol/next-icons";
+import { Deck } from "../deck";
 
-const CHUNK_SIZE = 25;
-
-const SKELETON = new Array(CHUNK_SIZE).fill(null).map((_, i) => (
-  <div className="col-span-full grid grid-cols-subgrid px-6 py-1 gap-6" key={i}>
-    <div className="w-full bg-gray-400 rounded animate-pulse">&nbsp;</div>
-    <div className="w-full min-w-[8ch] bg-gray-400 rounded animate-pulse">
-      &nbsp;
-    </div>
-  </div>
-));
+const CHUNK_SIZE = 10;
 
 export function Browser() {
   const client = useDataMall();
@@ -54,9 +47,50 @@ export function Browser() {
     };
   }, [loading]);
 
-  return <Section title="Browse bus stops">
-
-  </Section>
+  return (
+    <Section title="Bus stops">
+      <Deck>
+        {entities.map(({ BusStopCode, Description, RoadName }) => {
+          return (
+            <Deck.Item key={BusStopCode}>
+              <header className="col-span-full grid grid-cols-subgrid items-center">
+                <h2>{Description}</h2>
+                <button
+                  className="flex flex-row flex-nowrap items-center px-2 py-1 bg-white/8 border border-white/13 rounded"
+                  type="button"
+                >
+                  <Star className="size-3" />
+                  <span className="ml-2 text-sm">Star</span>
+                </button>
+              </header>
+              <p className="text-xs text-gray-400">{RoadName}</p>
+            </Deck.Item>
+          );
+        })}
+        {!!loading && (
+          <>
+            <Deck.Item />
+            <Deck.Item />
+            <Deck.Item />
+            <Deck.Item />
+            <Deck.Item />
+          </>
+        )}
+        {!loading && startToken && (
+          <Trigger
+            onTrigger={() => {
+              setLoadingState(() =>
+                client.queryCatalog<DataMall.BusStopInfo>(DataStore.Locations, {
+                  limit: CHUNK_SIZE,
+                  startFrom: startToken,
+                })
+              );
+            }}
+          />
+        )}
+      </Deck>
+    </Section>
+  );
 }
 
 function Trigger({ onTrigger }: { onTrigger?: { (): void } }) {

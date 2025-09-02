@@ -8,7 +8,7 @@ export function Seach() {
   const suggestions = state.result?.result;
 
   return (
-    <Section title="Search bus stops">
+    <Section title="Find bus stops">
       <form
         action={action}
         className="mt-3 bg-white/8 border border-white/13 focus-within:border-emerald-300 rounded overflow-hidden"
@@ -37,7 +37,7 @@ export function Seach() {
       {suggestions && (
         <ul className="mt-6 grid grid-cols-1 gap-3">
           <li className="flex flex-row flexflex-nowrap items-center">
-            <h2 className="flex-1">Results</h2>
+            <h2 className="flex-1">Choose an address</h2>
             <form action={action}>
               <input type="hidden" name="action" value="reset" />
               <button
