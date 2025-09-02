@@ -35,10 +35,19 @@ export interface SearchPlacesResult {
   result: PlaceInfo[];
 }
 
+export interface SearchPlacesState {
+  error?: string;
+  result?: SearchPlacesResult;
+}
+
 export async function searchPlaces(
   prevState: unknown,
-  formData: FormData
-): Promise<{ error?: unknown; result?: SearchPlacesResult }> {
+  formData?: FormData | null
+): Promise<SearchPlacesState> {
+  if (!formData) {
+    return {};
+  }
+
   const url = new URL(
     "https://jn4dhjceva.execute-api.ap-southeast-1.amazonaws.com/prod/api/v1/sg/location"
   );
