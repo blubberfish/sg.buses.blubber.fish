@@ -1,9 +1,9 @@
-import { SERVER_CACHE_ONE_DAY } from '@/lib/constants'
+import { SERVER_CACHE_ONE_DAY } from "@/lib/constants";
 
 export async function GET(request: Request) {
   const skipParam = new URL(request.url).searchParams.get("$skip");
   const target = new URL(
-    "https://datamall2.mytransport.sg/ltaodataservice/BusStops"
+    "https://datamall2.mytransport.sg/ltaodataservice/BusRoutes"
   );
   if (skipParam) {
     target.searchParams.set("$skip", skipParam);

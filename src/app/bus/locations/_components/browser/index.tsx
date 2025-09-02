@@ -1,18 +1,15 @@
 "use client";
 
-import { useDataMall } from "@/lib/client/components/datamall-provider";
-import { Suspense, useEffect, useRef, useState } from "react";
+import { useDataMall } from "@/lib/client/components/datamall/contexts/client";
+import { DataStore } from "@/lib/client/datamall";
+import { useEffect, useRef, useState } from "react";
+import { Section } from "../section";
+import { Star } from "@deemlol/next-icons";
+import { Deck } from "../deck";
 
-const CHUNK_SIZE = 25;
+const CHUNK_SIZE = 10;
 
-const SKELETON = new Array(CHUNK_SIZE).fill(null).map((_, i) => (
-  <div className="col-span-full grid grid-cols-subgrid px-6 py-1 gap-6" key={i}>
-    <div className="w-full bg-gray-400 rounded animate-pulse">&nbsp;</div>
-    <div className="w-full min-w-[8ch] bg-gray-400 rounded animate-pulse">&nbsp;</div>
-  </div>
-));
-
-function List() {
+export function Browser() {
   const client = useDataMall();
   const [startToken, setStartTokenState] = useState<IDBValidKey>();
   const [entities, setEntitiesState] = useState<DataMall.BusStopInfo[]>([]);
@@ -20,7 +17,7 @@ function List() {
   const [loading, setLoadingState] = useState<
     ReturnType<(typeof client)["queryCatalog"]> | undefined
   >(
-    client.queryCatalog<DataMall.BusStopInfo>(client.STORE_LOCATIONS, {
+    client.queryCatalog<DataMall.BusStopInfo>(DataStore.Locations, {
       limit: CHUNK_SIZE,
       startFrom: startToken,
     })
@@ -51,33 +48,48 @@ function List() {
   }, [loading]);
 
   return (
-    <div className="grid grid-cols-[1fr_max-content] grid-flow-dense">
-      {entities.map(({ BusStopCode, Description, RoadName }) => (
-        <div
-          className="col-span-full grid grid-cols-subgrid grid-rows-1 gap-6 bg-white/20 hover:bg-white/15 odd:bg-white/10 odd:hover:bg-white/5"
-          key={BusStopCode}
-        >
-          <div className="py-1 pl-6 text-base">{Description} </div>
-          <div className="py-1 pr-6 text-sm text-mono">{RoadName} </div>
-        </div>
-      ))}
-      {!!loading && SKELETON}
-      {!!startToken && !loading && (
-        <Trigger
-          onTrigger={() => {
-            setLoadingState(
-              client.queryCatalog<DataMall.BusStopInfo>(
-                client.STORE_LOCATIONS,
-                {
+    <Section title="Bus stops">
+      <Deck>
+        {entities.map(({ BusStopCode, Description, RoadName }) => {
+          return (
+            <Deck.Item key={BusStopCode}>
+              <header className="col-span-full grid grid-cols-subgrid items-center">
+                <h2>{Description}</h2>
+                <button
+                  className="flex flex-row flex-nowrap items-center px-2 py-1 bg-white/8 border border-white/13 rounded"
+                  type="button"
+                >
+                  <Star className="size-3" />
+                  <span className="ml-2 text-sm">Star</span>
+                </button>
+              </header>
+              <p className="text-xs text-gray-400">{RoadName}</p>
+            </Deck.Item>
+          );
+        })}
+        {!!loading && (
+          <>
+            <Deck.Item />
+            <Deck.Item />
+            <Deck.Item />
+            <Deck.Item />
+            <Deck.Item />
+          </>
+        )}
+        {!loading && startToken && (
+          <Trigger
+            onTrigger={() => {
+              setLoadingState(() =>
+                client.queryCatalog<DataMall.BusStopInfo>(DataStore.Locations, {
                   limit: CHUNK_SIZE,
                   startFrom: startToken,
-                }
-              )
-            );
-          }}
-        />
-      )}
-    </div>
+                })
+              );
+            }}
+          />
+        )}
+      </Deck>
+    </Section>
   );
 }
 
@@ -109,12 +121,4 @@ function Trigger({ onTrigger }: { onTrigger?: { (): void } }) {
   }, [onTrigger]);
 
   return <div ref={elementRef}></div>;
-}
-
-export default function ListWrapper() {
-  return (
-    <Suspense>
-      <List />
-    </Suspense>
-  );
 }
