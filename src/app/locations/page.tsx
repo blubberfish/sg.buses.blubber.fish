@@ -10,6 +10,8 @@ import { ButtonHTMLAttributes } from "react";
 import { useRouter } from "next/navigation";
 import SplashScreen from "./_components/splash";
 import List from "./_components/list";
+import { SearchAddress } from "./_components/search-address";
+import { SearchBar } from "./_components/search";
 
 export default function Page() {
   return (
@@ -26,9 +28,11 @@ export default function Page() {
                 <MapPin className="size-4" />
                 <span className="pl-1 font-light overflow-hidden">Nearest</span>
               </PrettyButton>
+              <SearchBar />
             </header>
             <List />
           </div>
+          <SearchAddress />
         </SplashScreen>
       </DataContext>
     </DataMallProvider>
