@@ -4,7 +4,7 @@ import { point } from "@turf/helpers";
 import { Deck } from "../../deck";
 
 export interface ItemsProps {
-  active?: Set<string>;
+  active?: (id: DataMall.BusStopInfo["BusStopCode"]) => boolean;
   onToggleFavorite?: { (key: DataMall.BusStopInfo["BusStopCode"]): void };
   origin?: { latitude: number; longitude: number } | null;
   data: DataMall.BusStopInfo[];
@@ -26,7 +26,7 @@ export function Items({
               <h2>{Description}</h2>
               <button
                 className={`flex flex-row flex-nowrap items-center px-2 py-1 bg-white/8 ${
-                  active?.has(BusStopCode)
+                  active?.(BusStopCode)
                     ? "text-violet-400 border-violet-400"
                     : "border-white/13"
                 } border rounded hover:border-emerald-300 hover:text-emerald-300`}

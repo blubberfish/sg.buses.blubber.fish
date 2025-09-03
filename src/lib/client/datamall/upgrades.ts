@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   DatabaseUpgrade,
@@ -48,6 +48,17 @@ export const UPGRADE_LOG: Array<DatabaseUpgrade> = [
       });
       routeStore.createIndex(RoutesataStoreIndex.ByLocation, ["BusStopCode"]);
       routeStore.createIndex(RoutesataStoreIndex.ByService, ["ServiceNo"]);
+    },
+  },
+  {
+    description: "Add favorites store",
+    rule(params) {
+      return params.meta.from < 3;
+    },
+    worker({ database }) {
+      database.createObjectStore(DataStore.Favorites, {
+        keyPath: "id",
+      });
     },
   },
 ];

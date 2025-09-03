@@ -16,7 +16,7 @@ export class DataClient extends EventTarget {
   static readonly EVENT_READY = "datasource.ready";
 
   static get VERSION() {
-    return 2;
+    return 3;
   }
   static get NAMESPACE() {
     return "datamall@blubber.fish";
@@ -170,6 +170,22 @@ export class DataClient extends EventTarget {
     return new Promise<void>((resolve, reject) => {
       const transaction = database.transaction([name], "readwrite");
       const request = transaction.objectStore(name).put(data);
+      request.onsuccess = () => {
+        resolve();
+      };
+      request.onerror = () => {
+        reject(request.error);
+      };
+    });
+  }
+
+  async dropItem(name: string, key: IDBValidKey) {
+    const database = await this.source;
+    const request = database
+      .transaction([name], "readwrite")
+      .objectStore(name)
+      .delete(key);
+    return new Promise<void>((resolve, reject) => {
       request.onsuccess = () => {
         resolve();
       };

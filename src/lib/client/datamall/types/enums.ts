@@ -3,6 +3,7 @@ export enum DataStore {
   Meta = "meta",
   Routes = "routes",
   Services = "services",
+  Favorites = "favorites",
 }
 
 export enum LocationsDataStoreIndex {

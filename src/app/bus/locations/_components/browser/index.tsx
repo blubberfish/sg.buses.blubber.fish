@@ -2,11 +2,12 @@
 
 import { useDataMall } from "@/lib/client/components/datamall/contexts/client";
 import { DataStore, LocationsDataStoreIndex } from "@/lib/client/datamall";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Filter, Items, Trigger } from "./components";
 import { Section } from "../section";
 import { useBoundingBox, useUserLocation } from "./hooks";
 import { Deck } from "../deck";
+import { useFavorites } from "../favorites/provider";
 
 const CHUNK_SIZE = 10;
 const MIN_CHUNK_SIZE = 5;
@@ -18,18 +19,7 @@ export function Browser() {
   const bounds = useBoundingBox();
   const [startToken, setStartTokenState] = useState<IDBValidKey>();
   const [entities, setEntitiesState] = useState<DataMall.BusStopInfo[]>([]);
-  const [favorites, setFavorites] = useState(
-    (() => {
-      const record = localStorage.getItem(KEY);
-      if (!record) return new Set<string>();
-      try {
-        return new Set(JSON.parse(record) as string[]);
-      } catch {
-        localStorage.removeItem(KEY);
-        return new Set<string>();
-      }
-    })()
-  );
+  const { data, toggle } = useFavorites();
 
   const [loading, setLoadingState] = useState<
     ReturnType<(typeof client)["queryCatalog"]> | undefined
@@ -104,21 +94,10 @@ export function Browser() {
     <Section title="Bus stops">
       <Filter />
       <Items
-        active={favorites}
+        active={(key) => data?.has(key) ?? false}
         data={entities}
         onToggleFavorite={(id) => {
-          const updatedFavorites = new Set(favorites);
-          if (updatedFavorites.has(id)) {
-            updatedFavorites.delete(id);
-          } else {
-            updatedFavorites.add(id);
-          }
-
-          localStorage.setItem(
-            KEY,
-            JSON.stringify(Array.from(updatedFavorites))
-          );
-          setFavorites(updatedFavorites);
+          toggle(id);
         }}
         origin={position}
       >
