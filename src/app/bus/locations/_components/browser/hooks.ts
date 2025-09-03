@@ -91,8 +91,15 @@ async function locateUser(): Promise<GeolocationCoordinates | null> {
 }
 
 export function useUserLocation() {
-  const [position, setPosition] = useState<GeolocationCoordinates | null>(null);
-  const [loading, setLoading] = useState(locateUser());
+  const [position, setPosition] = useState<
+    GeolocationCoordinates | undefined | null
+  >(null);
+  const [loading, setLoading] = useState(
+    locateUser().catch((reason) => {
+      console.error(new Error("User location error", { cause: reason }));
+      return null;
+    })
+  );
   useEffect(() => {
     if (!loading) return;
 

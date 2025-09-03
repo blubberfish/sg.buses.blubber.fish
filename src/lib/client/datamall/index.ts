@@ -102,7 +102,7 @@ export class DataClient extends EventTarget {
       if (query && "only" in query) {
         const request = transaction.objectStore(name).get(query.only);
         request.onsuccess = () => {
-          resolve(request.result);
+          resolve({ data: [request.result] });
         };
         request.onerror = () => {
           reject(request.error);
