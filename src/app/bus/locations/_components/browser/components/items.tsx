@@ -1,4 +1,3 @@
-import { Star } from "@deemlol/next-icons";
 import { distance } from "@turf/distance";
 import { point } from "@turf/helpers";
 import { Deck } from "../../deck";
@@ -24,7 +23,12 @@ export function Items({
         ({ BusStopCode, Description, RoadName, Longitude, Latitude }) => (
           <Deck.Item key={BusStopCode}>
             <header className="col-span-full grid grid-cols-subgrid items-center">
-              <h2>{Description}</h2>
+              <a
+                className="text-violet-300 hover:underline cursor-pointer"
+                href={`/bus/location/${BusStopCode}`}
+              >
+                <h2>{Description}</h2>
+              </a>
               <StarButton
                 active={active?.(BusStopCode)}
                 onClick={() => {

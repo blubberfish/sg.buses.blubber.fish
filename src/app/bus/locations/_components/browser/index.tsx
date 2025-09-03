@@ -11,7 +11,6 @@ import { useFavorites } from "../favorites/provider";
 
 const CHUNK_SIZE = 10;
 const MIN_CHUNK_SIZE = 5;
-const KEY = "favorites.busStops";
 
 export function Browser() {
   const { position } = useUserLocation();

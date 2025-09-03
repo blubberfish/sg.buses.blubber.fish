@@ -2,11 +2,14 @@ import { useDataMall } from "@/lib/client/components/datamall/contexts/client";
 import { Deck } from "../../deck";
 import { DataStore } from "@/lib/client/datamall";
 import { useEffect, useState } from "react";
+import { StarButton } from "../../star-button";
 
 export function Item({
   objectId,
+  onClick,
 }: {
   objectId: DataMall.BusStopInfo["BusStopCode"];
+  onClick?: () => void;
 }) {
   const client = useDataMall();
   const [loading, setLoading] = useState<
@@ -38,10 +41,15 @@ export function Item({
   return (
     <Deck.Item>
       <header className="col-span-full grid grid-cols-subgrid">
-        <h2>{data.Description}</h2>
-        <button></button>
+        <a
+          className="hover:underline text-violet-300 cursor-pointer"
+          href={`/bus/location/${data.BusStopCode}`}
+        >
+          <h2>{data.Description}</h2>
+        </a>
+        <StarButton active onClick={onClick} />
       </header>
-      {data.RoadName}
+      <aside className="text-sm text-gray-400">{data.RoadName}</aside>
     </Deck.Item>
   );
 }
