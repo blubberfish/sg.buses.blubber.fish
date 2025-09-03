@@ -2,23 +2,7 @@
 
 import { type PlaceInfo } from "@/lib/server/actions/search-places";
 import { X } from "@deemlol/next-icons";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useMemo } from "react";
-
-function tryParseBase64JSON(data?: string | null) {
-  if (!data) return null;
-  try {
-    return JSON.parse(atob(data)) as PlaceInfo;
-  } catch {
-    return null;
-  }
-}
-
-const PARSER = {
-  address: tryParseBase64JSON,
-} as {
-  [key: string]: { (data?: string | null): unknown };
-};
+import { useFilterData } from "../hooks";
 
 const RENDERER = {
   address: (
@@ -43,21 +27,14 @@ const RENDERER = {
 };
 
 export function Filter() {
-  const router = useRouter();
-  const params = useSearchParams();
-  const filter = params.get("filterBy") ?? "";
-  const filterData = useMemo(
-    () => !!filter && PARSER[filter]?.(params.get(filter)),
-    [filter, params]
-  );
+  const filtering = useFilterData();
 
-  return (
-    RENDERER[filter]?.(filterData as never, () => {
-      console.log("reset");
-      const url = new URL(document.location.href);
-      url.searchParams.delete("filterBy");
-      url.searchParams.delete(filter);
-      router.push(url.toString());
-    }) || null
-  );
+  if (!filtering) return null;
+
+  const {
+    by,
+    filter,
+    actions: { reset },
+  } = filtering;
+  return RENDERER[by]?.(filter, reset) || null;
 }
