@@ -1,6 +1,8 @@
 "use client";
 
 import type { PlaceInfo } from "@/lib/server/actions/search-places";
+import { BEARING, RADIUS_STEPS } from "@/lib/constants";
+import { destination } from "@turf/destination";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useMemo } from "react";
 
@@ -44,4 +46,32 @@ export function useFilterData():
       },
     } as ReturnType<typeof useFilterData>;
   }, [filter, filterData, router]);
+}
+
+export function useBoundingBox() {
+  const filter = useFilterData();
+  return useMemo(() => {
+    if (!filter) return null;
+    if (filter.by === "address") {
+      const {
+        filter: {
+          Place: {
+            Geometry: { Point },
+          },
+        },
+      } = filter;
+      return RADIUS_STEPS.map((distance) => {
+        const poles = Object.values(BEARING).map((bearing) =>
+          destination(Point, distance, bearing, { units: "meters" })
+        );
+        const longitudes = poles.map((p) => p.geometry.coordinates[0]);
+        const latitudes = poles.map((p) => p.geometry.coordinates[1]);
+        return {
+          min: [Math.min(...longitudes), Math.min(...latitudes)],
+          max: [Math.max(...longitudes), Math.max(...latitudes)],
+        };
+      });
+    }
+    return null;
+  }, [filter]);
 }

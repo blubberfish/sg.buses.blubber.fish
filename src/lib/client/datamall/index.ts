@@ -69,7 +69,14 @@ export class DataClient extends EventTarget {
     this.source.then(callback);
   }
 
-  queryCatalog<T>(name: string, query: { only: IDBValidKey }): Promise<T>;
+  queryCatalog<T>(
+    name: string,
+    query: { only: IDBValidKey }
+  ): Promise<{ data: T[] }>;
+  queryCatalog<T>(
+    name: string,
+    query: { range: IDBKeyRange; index?: string }
+  ): Promise<{ data: T[] }>;
   queryCatalog<T>(
     name: string,
     query: {
@@ -83,6 +90,7 @@ export class DataClient extends EventTarget {
       | {
           only: IDBValidKey;
         }
+      | { range: IDBKeyRange; index?: string }
       | {
           startFrom?: IDBValidKey;
           limit?: number;
@@ -101,7 +109,33 @@ export class DataClient extends EventTarget {
         };
         return;
       }
+
       const data: unknown[] = [];
+
+      if (query && "range" in query) {
+        const { index } = query;
+        const request = (
+          index
+            ? transaction.objectStore(name).index(index)
+            : transaction.objectStore(name)
+        ).openCursor(query.range);
+        request.onsuccess = (event) => {
+          const cursor = (event.target as IDBRequest<IDBCursorWithValue>)
+            .result;
+          if (!cursor) {
+            resolve({ data });
+            return;
+          }
+          data.push(cursor.value);
+          cursor.continue();
+          return;
+        };
+        request.onerror = () => {
+          reject(request.error);
+        };
+        return;
+      }
+
       const request = transaction
         .objectStore(name)
         .openCursor(
@@ -122,6 +156,9 @@ export class DataClient extends EventTarget {
         data.push(cursor.value);
         cursor.continue();
         return;
+      };
+      request.onerror = () => {
+        reject(request.error);
       };
 
       return;
