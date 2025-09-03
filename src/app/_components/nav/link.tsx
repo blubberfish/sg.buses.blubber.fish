@@ -15,10 +15,10 @@ export function Link({
         activePath
           ? "border-b-emerald-300 text-emerald-400"
           : "border-b-transparent text-current"
-      }`}
+      } flex flex-row flex-nowrap items-center p-1`}
       href={path}
     >
-      <span className="px-2 p-1 rounded hover:bg-white/15">{children}</span>
+      {children}
     </a>
   );
 }
