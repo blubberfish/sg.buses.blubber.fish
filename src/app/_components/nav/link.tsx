@@ -12,7 +12,9 @@ export function Link({
   return (
     <a
       className={`p-1 -mb-[1px] border-b ${
-        activePath ? "border-b-emerald-300" : "border-b-transparent"
+        activePath
+          ? "border-b-emerald-300 text-emerald-400"
+          : "border-b-transparent text-current"
       }`}
       href={path}
     >

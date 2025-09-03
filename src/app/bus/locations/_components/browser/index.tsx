@@ -2,10 +2,9 @@
 
 import { useDataMall } from "@/lib/client/components/datamall/contexts/client";
 import { DataStore } from "@/lib/client/datamall";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import { Items, Trigger } from "./components";
 import { Section } from "../section";
-import { Star } from "@deemlol/next-icons";
-import { Deck } from "../deck";
 
 const CHUNK_SIZE = 10;
 
@@ -49,34 +48,8 @@ export function Browser() {
 
   return (
     <Section title="Bus stops">
-      <Deck>
-        {entities.map(({ BusStopCode, Description, RoadName }) => {
-          return (
-            <Deck.Item key={BusStopCode}>
-              <header className="col-span-full grid grid-cols-subgrid items-center">
-                <h2>{Description}</h2>
-                <button
-                  className="flex flex-row flex-nowrap items-center px-2 py-1 bg-white/8 border border-white/13 rounded"
-                  type="button"
-                >
-                  <Star className="size-3" />
-                  <span className="ml-2 text-sm">Star</span>
-                </button>
-              </header>
-              <p className="text-xs text-gray-400">{RoadName}</p>
-            </Deck.Item>
-          );
-        })}
+      <Items data={entities}>
         {!!loading && (
-          <>
-            <Deck.Item />
-            <Deck.Item />
-            <Deck.Item />
-            <Deck.Item />
-            <Deck.Item />
-          </>
-        )}
-        {!loading && startToken && (
           <Trigger
             onTrigger={() => {
               setLoadingState(() =>
@@ -88,37 +61,7 @@ export function Browser() {
             }}
           />
         )}
-      </Deck>
+      </Items>
     </Section>
   );
-}
-
-function Trigger({ onTrigger }: { onTrigger?: { (): void } }) {
-  const observerRef = useRef<IntersectionObserver>(undefined);
-  const elementRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const target = elementRef.current;
-    if (!target) return;
-    const observer = (observerRef.current =
-      observerRef.current ??
-      new IntersectionObserver(
-        (entries) => {
-          const scrolledIntoView = entries.some(
-            (entry) => entry.target === target && entry.isIntersecting
-          );
-          if (!scrolledIntoView) return;
-          onTrigger?.();
-        },
-        {
-          threshold: 1,
-        }
-      ));
-    observer.observe(target);
-    return () => {
-      observer.unobserve(target);
-    };
-  }, [onTrigger]);
-
-  return <div ref={elementRef}></div>;
 }
