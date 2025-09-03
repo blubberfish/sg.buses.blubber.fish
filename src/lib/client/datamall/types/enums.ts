@@ -15,7 +15,7 @@ export enum ServicesDataStoreIndex {
   ByDestination = "byDestination",
 }
 
-export enum RoutesataStoreIndex {
+export enum RoutesDataStoreIndex {
   ByService = "byService",
   ByLocation = "byLocation",
 }
