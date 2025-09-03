@@ -20,3 +20,12 @@ export const DEFAULT_POSITION_BIAS = {
     LATITUDE: 1.3521,
   },
 };
+
+export const RADIUS_STEPS = [150, 250, 500];
+
+export const BEARING = {
+  N: 0,
+  S: 180,
+  E: 90,
+  W: -90,
+} as const;
