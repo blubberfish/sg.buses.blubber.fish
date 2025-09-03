@@ -1,4 +1,6 @@
 import { ServiceList } from "./components/services";
+import { Info } from './components'
+import { DataMallProvider } from "@/lib/client/components/datamall/contexts/client";
 
 async function load(id: string) {
   const url = new URL(
@@ -25,9 +27,11 @@ export default async function Page({
   const { code } = await params;
 
   return (
-    <div>
-      <ServiceList locationCode={code} />
-      Bus Location: {code}
-    </div>
+    <DataMallProvider>
+      <section className="mx-3">
+        <h1 className="text-xl my-3">Bus stop</h1>
+        <Info locationCode={code} />
+      </section>
+    </DataMallProvider>
   );
 }
