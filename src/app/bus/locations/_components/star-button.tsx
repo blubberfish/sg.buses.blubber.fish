@@ -1,4 +1,4 @@
-import { Star } from "@deemlol/next-icons";
+import { Star } from "lucide-react";
 
 export function StarButton({
   active,

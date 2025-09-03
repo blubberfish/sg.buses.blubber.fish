@@ -6,7 +6,7 @@ import { UPGRADE_LOG } from "./upgrades";
 export {
   DataStore,
   LocationsDataStoreIndex,
-  RoutesataStoreIndex,
+  RoutesDataStoreIndex,
   ServicesDataStoreIndex,
 } from "./types";
 

@@ -4,7 +4,7 @@ import {
   DatabaseUpgrade,
   DataStore,
   LocationsDataStoreIndex,
-  RoutesataStoreIndex,
+  RoutesDataStoreIndex,
   ServicesDataStoreIndex,
 } from "./types";
 
@@ -46,8 +46,8 @@ export const UPGRADE_LOG: Array<DatabaseUpgrade> = [
       const routeStore = database.createObjectStore(DataStore.Routes, {
         keyPath: ["ServiceNo", "BusStopCode", "Direction", "StopSequence"],
       });
-      routeStore.createIndex(RoutesataStoreIndex.ByLocation, ["BusStopCode"]);
-      routeStore.createIndex(RoutesataStoreIndex.ByService, ["ServiceNo"]);
+      routeStore.createIndex(RoutesDataStoreIndex.ByLocation, ["BusStopCode"]);
+      routeStore.createIndex(RoutesDataStoreIndex.ByService, ["ServiceNo"]);
     },
   },
   {

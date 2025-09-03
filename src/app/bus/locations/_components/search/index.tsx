@@ -1,7 +1,7 @@
-import { Search, X } from "@deemlol/next-icons";
+import { searchPlaces } from "@/lib/server/actions/search-places";
+import { Search, X } from "lucide-react";
 import { Section } from "../section";
 import { useActionState } from "react";
-import { searchPlaces } from "@/lib/server/actions/search-places";
 
 export function Seach() {
   const [state, action, pending] = useActionState(searchPlaces, {});
