@@ -2,19 +2,34 @@
 
 import { useDataMall } from "@/lib/client/components/datamall/contexts/client";
 import { DataStore, LocationsDataStoreIndex } from "@/lib/client/datamall";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Filter, Items, Trigger } from "./components";
 import { Section } from "../section";
-import { useBoundingBox } from "./hooks";
+import { useBoundingBox, useUserLocation } from "./hooks";
+import { Deck } from "../deck";
 
 const CHUNK_SIZE = 10;
 const MIN_CHUNK_SIZE = 5;
+const KEY = "favorites.busStops";
 
 export function Browser() {
+  const { position } = useUserLocation();
   const client = useDataMall();
   const bounds = useBoundingBox();
   const [startToken, setStartTokenState] = useState<IDBValidKey>();
   const [entities, setEntitiesState] = useState<DataMall.BusStopInfo[]>([]);
+  const [favorites, setFavorites] = useState(
+    (() => {
+      const record = localStorage.getItem(KEY);
+      if (!record) return new Set<string>();
+      try {
+        return new Set(JSON.parse(record) as string[]);
+      } catch {
+        localStorage.removeItem(KEY);
+        return new Set<string>();
+      }
+    })()
+  );
 
   const [loading, setLoadingState] = useState<
     ReturnType<(typeof client)["queryCatalog"]> | undefined
@@ -88,7 +103,34 @@ export function Browser() {
   return (
     <Section title="Bus stops">
       <Filter />
-      <Items data={entities}>
+      <Items
+        active={favorites}
+        data={entities}
+        onToggleFavorite={(id) => {
+          const updatedFavorites = new Set(favorites);
+          if (updatedFavorites.has(id)) {
+            updatedFavorites.delete(id);
+          } else {
+            updatedFavorites.add(id);
+          }
+
+          localStorage.setItem(
+            KEY,
+            JSON.stringify(Array.from(updatedFavorites))
+          );
+          setFavorites(updatedFavorites);
+        }}
+        origin={position}
+      >
+        {!!loading && (
+          <>
+            <Deck.Item />
+            <Deck.Item />
+            <Deck.Item />
+            <Deck.Item />
+            <Deck.Item />
+          </>
+        )}
         {!loading && !bounds && !!startToken && (
           <Trigger
             onTrigger={() => {
