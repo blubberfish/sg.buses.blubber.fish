@@ -5,7 +5,7 @@ import {
   useDataMall,
 } from "@/lib/client/components/datamall/contexts/client";
 import { DataStore, RoutesDataStoreIndex } from "@/lib/client/datamall";
-import { Suspense, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 function useServices(atLocation: string) {
   const client = useDataMall();

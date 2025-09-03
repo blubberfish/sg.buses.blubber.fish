@@ -1,5 +1,4 @@
 import { DataMallProvider } from "@/lib/client/components/datamall/contexts/client";
-import { Accessibility, PlusSquare } from "lucide-react";
 import React from "react";
 import { Info } from "./components";
 
