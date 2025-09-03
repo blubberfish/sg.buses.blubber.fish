@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckCircle, Loader } from "@deemlol/next-icons";
+import { CheckCircle, Loader } from "lucide-react";
 import { useDataContext } from "@/lib/client/components/datamall/contexts/data";
 import Spinner from "@/lib/components/spinner";
 import React from "react";

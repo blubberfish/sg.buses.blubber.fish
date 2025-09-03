@@ -9,8 +9,8 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@deemlol/next-icons": "^0.1.9",
     "@turf/turf": "^7.2.0",
+    "lucide-react": "^0.542.0",
     "maplibre-gl": "^5.7.0",
     "next": "15.5.2",
     "next-auth": "^4.24.11",

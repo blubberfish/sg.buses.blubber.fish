@@ -5,7 +5,7 @@ import { DataStore, LocationsDataStoreIndex } from "@/lib/client/datamall";
 import { useEffect, useState } from "react";
 import { Filter, Items, Trigger } from "./components";
 import { Section } from "../section";
-import { useBoundingBox, useUserLocation } from "./hooks";
+import { useBoundingBox } from "./hooks";
 import { Deck } from "../deck";
 import { useFavorites } from "../favorites/provider";
 
@@ -13,7 +13,6 @@ const CHUNK_SIZE = 10;
 const MIN_CHUNK_SIZE = 5;
 
 export function Browser() {
-  const { position } = useUserLocation();
   const client = useDataMall();
   const bounds = useBoundingBox();
   const [startToken, setStartTokenState] = useState<IDBValidKey>();
@@ -98,7 +97,6 @@ export function Browser() {
         onToggleFavorite={(id) => {
           toggle(id);
         }}
-        origin={position}
       >
         {!!loading && (
           <>

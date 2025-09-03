@@ -1,7 +1,7 @@
 "use client";
 
 import { type PlaceInfo } from "@/lib/server/actions/search-places";
-import { X } from "@deemlol/next-icons";
+import { X } from "lucide-react";
 import { useFilterData } from "../hooks";
 
 const RENDERER = {
