@@ -3,7 +3,7 @@
 import { useDataMall } from "@/lib/client/components/datamall/contexts/client";
 import { DataStore } from "@/lib/client/datamall";
 import { useEffect, useState } from "react";
-import { Items, Trigger } from "./components";
+import { Filter, Items, Trigger } from "./components";
 import { Section } from "../section";
 
 const CHUNK_SIZE = 10;
@@ -48,8 +48,9 @@ export function Browser() {
 
   return (
     <Section title="Bus stops">
+      <Filter />
       <Items data={entities}>
-        {!!loading && (
+        {!loading && !!startToken && (
           <Trigger
             onTrigger={() => {
               setLoadingState(() =>
