@@ -4,7 +4,7 @@ import type { PlaceInfo } from "@/lib/server/actions/search-places";
 import { BEARING, RADIUS_STEPS } from "@/lib/constants";
 import { destination } from "@turf/destination";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 function tryParseBase64JSON(data?: false | string | null) {
   if (!data) return null;
@@ -74,4 +74,51 @@ export function useBoundingBox() {
     }
     return null;
   }, [filter]);
+}
+
+async function locateUser(): Promise<GeolocationCoordinates | null> {
+  if (!("geolocation" in navigator)) return null;
+  return new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(
+      ({ coords }) => {
+        resolve(coords);
+      },
+      (error) => {
+        reject(error);
+      }
+    );
+  });
+}
+
+export function useUserLocation() {
+  const [position, setPosition] = useState<
+    GeolocationCoordinates | undefined | null
+  >(null);
+  const [loading, setLoading] = useState(
+    locateUser().catch((reason) => {
+      console.error(new Error("User location error", { cause: reason }));
+      return null;
+    })
+  );
+  useEffect(() => {
+    if (!loading) return;
+
+    let abort = false;
+    loading.then((coords) => {
+      if (abort) return;
+      setPosition(coords);
+    });
+    return () => {
+      abort = true;
+    };
+  }, [loading]);
+
+  return {
+    loading: !!loading,
+    position,
+    refresh() {
+      if (!!loading) return;
+      setLoading(locateUser());
+    },
+  };
 }

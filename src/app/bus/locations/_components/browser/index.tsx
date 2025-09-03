@@ -5,16 +5,20 @@ import { DataStore, LocationsDataStoreIndex } from "@/lib/client/datamall";
 import { useEffect, useState } from "react";
 import { Filter, Items, Trigger } from "./components";
 import { Section } from "../section";
-import { useBoundingBox } from "./hooks";
+import { useBoundingBox, useUserLocation } from "./hooks";
+import { Deck } from "../deck";
+import { useFavorites } from "../favorites/provider";
 
 const CHUNK_SIZE = 10;
 const MIN_CHUNK_SIZE = 5;
 
 export function Browser() {
+  const { position } = useUserLocation();
   const client = useDataMall();
   const bounds = useBoundingBox();
   const [startToken, setStartTokenState] = useState<IDBValidKey>();
   const [entities, setEntitiesState] = useState<DataMall.BusStopInfo[]>([]);
+  const { data, toggle } = useFavorites();
 
   const [loading, setLoadingState] = useState<
     ReturnType<(typeof client)["queryCatalog"]> | undefined
@@ -88,7 +92,23 @@ export function Browser() {
   return (
     <Section title="Bus stops">
       <Filter />
-      <Items data={entities}>
+      <Items
+        active={(key) => data?.has(key) ?? false}
+        data={entities}
+        onToggleFavorite={(id) => {
+          toggle(id);
+        }}
+        origin={position}
+      >
+        {!!loading && (
+          <>
+            <Deck.Item />
+            <Deck.Item />
+            <Deck.Item />
+            <Deck.Item />
+            <Deck.Item />
+          </>
+        )}
         {!loading && !bounds && !!startToken && (
           <Trigger
             onTrigger={() => {

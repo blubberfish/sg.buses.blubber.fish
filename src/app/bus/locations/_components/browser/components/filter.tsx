@@ -6,7 +6,7 @@ import { useFilterData } from "../hooks";
 
 const RENDERER = {
   address: (
-    { Place: { Label, Neighborhood, SubRegion } }: PlaceInfo,
+    { Place: { Label } }: PlaceInfo,
     onReset?: { (): void }
   ) => (
     <div className="my-3">

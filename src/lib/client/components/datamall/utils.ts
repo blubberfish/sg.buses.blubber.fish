@@ -22,7 +22,9 @@ export const loadStore: DataStoreLoader = async (store, loader, context) =>
         only: store,
       }
     )
-    .then((meta) => meta && Date.now() - meta.lastModified < 7 * ONE_DAY)
+    .then(
+      ({ data: [meta] }) => meta && Date.now() - meta.lastModified < 7 * ONE_DAY
+    )
     .then((skip) => {
       if (skip) return;
       return loader(async (data) => {
