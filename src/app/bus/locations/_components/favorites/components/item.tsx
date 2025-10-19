@@ -1,8 +1,8 @@
 import { useDataMall } from "@/lib/client/components/datamall/contexts/client";
 import { Deck } from "../../deck";
 import { DataStore } from "@/lib/client/datamall";
+import { StarOff } from "lucide-react";
 import { useEffect, useState } from "react";
-import { StarButton } from "../../star-button";
 
 export function Item({
   objectId,
@@ -37,19 +37,24 @@ export function Item({
     };
   }, [loading]);
 
-  if (!data) return <Deck.Item></Deck.Item>;
+  if (!data) return null;
   return (
-    <Deck.Item>
-      <header className="col-span-full grid grid-cols-subgrid">
-        <a
-          className="hover:underline text-violet-300 cursor-pointer"
-          href={`/bus/location/${data.BusStopCode}`}
-        >
-          <h2>{data.Description}</h2>
-        </a>
-        {!!onClick && <StarButton active onClick={onClick} />}
-      </header>
-      <aside className="text-sm text-gray-400">{data.RoadName}</aside>
-    </Deck.Item>
+    <li className="px-3 py-2">
+      <a
+        className="hover:underline text-violet-300 cursor-pointer"
+        href={`/bus/location/${data.BusStopCode}`}
+      >
+        {data.Description}
+      </a>
+      <aside className="mt-1 text-xs text-gray-400">{data.RoadName}</aside>
+      <button
+        className="px-3 py-1 my-1 border border-gray-400 bg-white/13 rounded text-xs hover:ring-2 hover:ring-emerald-300"
+        onClick={onClick}
+        type="button"
+      >
+        <StarOff className="inline-block align-middle size-[1em]" />
+        <span className="align-middle ml-1">Unstar</span>
+      </button>
+    </li>
   );
 }

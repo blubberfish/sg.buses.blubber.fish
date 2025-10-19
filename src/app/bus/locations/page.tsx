@@ -9,7 +9,7 @@ import { Seach } from "./_components/search";
 export default function Page() {
   return (
     <FavoritesProvider>
-      <div className="flex flex-col md:flex-row">
+      <div className="mx-9 flex flex-col md:flex-row gap-x-9">
         <Favorites />
         <div className="flex-1 mt-9 md:mt-0">
           <Seach />
