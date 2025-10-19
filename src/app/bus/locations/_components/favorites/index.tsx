@@ -3,9 +3,9 @@ import { useFavorites } from "./provider";
 import { Item } from "./components";
 
 export function Favorites() {
-  const { data, loading, toggle } = useFavorites();
+  const { data, loading } = useFavorites();
   return (
-    <section className="mx-3">
+    <section className="mx-9 min-w-xs">
       <h1 className="text-2xl font-bold">Favorite locations</h1>
       <Deck>
         {!!data && data.size <= 0 && <div></div>}
@@ -15,9 +15,6 @@ export function Favorites() {
             <Item
               key={id}
               objectId={id}
-              onClick={() => {
-                toggle(id);
-              }}
             ></Item>
           ))}
         {loading && !data && (

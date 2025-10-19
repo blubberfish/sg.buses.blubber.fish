@@ -47,7 +47,7 @@ export function Item({
         >
           <h2>{data.Description}</h2>
         </a>
-        <StarButton active onClick={onClick} />
+        {!!onClick && <StarButton active onClick={onClick} />}
       </header>
       <aside className="text-sm text-gray-400">{data.RoadName}</aside>
     </Deck.Item>

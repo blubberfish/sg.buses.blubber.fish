@@ -5,7 +5,7 @@ export function Section({
   children,
 }: PropsWithChildren<{ title: string }>) {
   return (
-    <section className="mx-3 mt-6">
+    <section className="mx-9">
       <h1 className="text-2xl font-bold">{title}</h1>
       {children}
     </section>

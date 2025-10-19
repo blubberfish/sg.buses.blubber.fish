@@ -1,7 +1,11 @@
-import { Bus, Waypoints } from "lucide-react";
+import { DashboardContainer } from "@/lib/components/dashboard/container";
+import { DashboardHeader } from "@/lib/components/dashboard/header";
+import { Bus, Heart } from "lucide-react";
 import type { Metadata } from "next";
-import { Link, NavGroup } from "./_components/nav";
+import { SideBar } from "./_components/side-bar";
+import { SideBarButton } from "./_components/side-bar/button";
 import "./globals.css";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "SG @ BlubberFish",
@@ -16,24 +20,21 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="min-h-svh w-screen bg-neutral-900 text-white/80">
-        <div className="w-full max-w-md min-h-svh mx-auto bg-neutral-800">
-          <header className="w-full h-16"></header>
-          <NavGroup>
-            <Link path="/bus/locations">
-              <div className="flex flex-row flex-nowrap items-center px-2 py-1 hover:bg-white/10 rounded">
-                <Bus className="size-4" />
-                <span className="ml-2 font-bold">Bus stops</span>
-              </div>
-            </Link>
-            <Link path="/bus/services">
-              <div className="flex flex-row flex-nowrap items-center px-2 py-1 hover:bg-white/10 rounded">
-                <Waypoints className="size-4" />
-                <span className="ml-2 font-bold">Bus services</span>
-              </div>
-            </Link>
-          </NavGroup>
+        <DashboardContainer>
+          <DashboardHeader>
+            <h1 className="ml-9">Blubberfish</h1>
+            <nav className="mr-9">
+              <SideBarButton />
+            </nav>
+          </DashboardHeader>
           {children}
-        </div>
+        </DashboardContainer>
+        <SideBar>
+          <Link className="block px-9 py-3" href="/bus/locations">
+            <Bus className="inline-block align-middle" />
+            <span className="inline-block align-middle ml-3">Locations</span>
+          </Link>
+        </SideBar>
       </body>
     </html>
   );
