@@ -27,6 +27,10 @@ export class DatamallBusRoutesService extends Component {
             }
           }
         }
+        await db.put(DATABASE_DESCRIPTOR.META.store, {
+          catelog: DATABASE_DESCRIPTOR.BUS_ROUTES.store,
+          timestamp: Date.now(),
+        });
         resolve();
       });
     }
