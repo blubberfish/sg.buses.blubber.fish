@@ -53,9 +53,7 @@ export class RestAPIService extends Component {
       headers: {
         ...this.headers,
       },
-      search: new URLSearchParams([
-        ["BusStopCode", (options?.id || 0).toFixed(0)],
-      ]),
+      search: new URLSearchParams([["BusStopCode", options?.id || ""]]),
       next: {
         revalidate: 2 * SERVER_CACHE_ONE_MINUTE,
       },
