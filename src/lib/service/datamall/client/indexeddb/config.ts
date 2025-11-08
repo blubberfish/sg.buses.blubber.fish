@@ -50,6 +50,10 @@ export const DATABASE_DESCRIPTOR = {
   } satisfies StoreConfiguration,
   META: {
     store: "meta",
-    key: "catalog",
+    key: "catelog",
+  } satisfies StoreConfiguration,
+  FAVORITE_BUS_STOPS: {
+    store: "favorites:busstops",
+    key: "id",
   } satisfies StoreConfiguration,
 } as const;

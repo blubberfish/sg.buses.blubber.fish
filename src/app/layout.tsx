@@ -21,22 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="min-h-svh w-screen bg-neutral-900 text-white/80">
-        <Loaders />
-        <DashboardContainer>
-          <DashboardHeader>
-            <h1 className="ml-9">Blubberfish</h1>
-            <nav className="mr-9">
-              <SideBarButton />
-            </nav>
-          </DashboardHeader>
-          {children}
-        </DashboardContainer>
-        <SideBar>
-          <Link className="block px-9 py-3" href="/bus/locations">
-            <Bus className="inline-block align-middle" />
-            <span className="inline-block align-middle ml-3">Locations</span>
-          </Link>
-        </SideBar>
+        {children}
       </body>
     </html>
   );

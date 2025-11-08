@@ -55,4 +55,55 @@ export class IDBService extends Component {
       )
     ) as Promise<unknown>;
   }
+
+  async queryOne<T>(
+    store: string,
+    params: { filter: IDBValidKey | IDBKeyRange; index?: string }
+  ) {
+    const database = await this.client;
+    const transaction = database.transaction(store, "readonly");
+    return new Promise<T>((resolve, reject) => {
+      const collection = transaction.objectStore(store);
+      const request = params.index
+        ? collection.index(params.index).get(params.filter)
+        : collection.get(params.filter);
+      request.onsuccess = () => {
+        resolve(request.result as T);
+      };
+      request.onerror = () => {
+        reject(request.error);
+      };
+    });
+  }
+
+  async queryMany<T>(
+    store: string,
+    params: { index?: string; startAt?: number; filter: IDBValidKey | IDBKeyRange }
+  ) {
+    const database = await this.client;
+    const transaction = database.transaction(store, "readonly");
+    return new Promise<T[]>((resolve, reject) => {
+      const collection = transaction.objectStore(store);
+      const { filter, index } = params;
+      const result = [] as T[];
+      const request = index
+        ? collection.index(index).openCursor(filter)
+        : collection.openCursor(filter);
+      let skipped = Math.max(params.startAt ?? 0, 0);
+      request.onsuccess = () => {
+        const cursor = request.result;
+        if (!cursor) {
+          resolve(result);
+          return;
+        }
+        if (skipped > 0) {
+          cursor.advance(skipped);
+          skipped = 0;
+          return;
+        }
+        result.push(cursor.value);
+        cursor.continue()
+      };
+    });
+  }
 }

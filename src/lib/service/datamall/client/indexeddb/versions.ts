@@ -13,5 +13,7 @@ export const VERSIONS = {
     createStore(DATABASE_DESCRIPTOR.BUS_ROUTES);
     createStore(DATABASE_DESCRIPTOR.BUS_STOPS);
     createStore(DATABASE_DESCRIPTOR.BUS_SERVICES);
+    createStore(DATABASE_DESCRIPTOR.META);
+    createStore(DATABASE_DESCRIPTOR.FAVORITE_BUS_STOPS);
   },
 } as Readonly<{ [version: number]: { (database: IDBDatabase): void } }>;
