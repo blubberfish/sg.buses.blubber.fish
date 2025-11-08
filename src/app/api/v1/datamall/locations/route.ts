@@ -1,4 +1,4 @@
-import service, { RestAPIService } from "@/lib/service/datamall/server";
+import service, { DatamallRestAPIService } from "@/lib/service/datamall/server";
 
 function tryParse(s?: string | null) {
   if (!s) return 0;
@@ -16,6 +16,6 @@ function tryParse(s?: string | null) {
 export async function GET(request: Request) {
   const skipParam = new URL(request.url).searchParams.get("$skip");
   return service
-    .find(RestAPIService)
+    .find(DatamallRestAPIService)
     .getBusStops({ skip: tryParse(skipParam) });
 }

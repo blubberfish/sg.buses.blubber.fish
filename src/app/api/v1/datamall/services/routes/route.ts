@@ -1,21 +1,21 @@
-import { SERVER_CACHE_ONE_DAY } from "@/lib/constants";
+import service, { DatamallRestAPIService } from "@/lib/service/datamall/server";
+
+function tryParse(s?: string | null) {
+  if (!s) return 0;
+  try {
+    const n = parseInt(s, 10);
+    if (isNaN(n)) {
+      return 0;
+    }
+    return n;
+  } catch {
+    return 0;
+  }
+}
 
 export async function GET(request: Request) {
   const skipParam = new URL(request.url).searchParams.get("$skip");
-  const target = new URL(
-    "https://datamall2.mytransport.sg/ltaodataservice/BusRoutes"
-  );
-  if (skipParam) {
-    target.searchParams.set("$skip", skipParam);
-  }
-  return fetch(target, {
-    method: "GET",
-    headers: {
-      AccountKey: process.env.DATAMALL_APIKEY || "",
-      accept: "application/json",
-    },
-    next: {
-      revalidate: 30 * SERVER_CACHE_ONE_DAY,
-    },
-  });
+  return service
+    .find(DatamallRestAPIService)
+    .getBusRoutes({ skip: tryParse(skipParam) });
 }

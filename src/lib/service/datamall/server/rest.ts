@@ -1,7 +1,7 @@
 import { SERVER_CACHE_ONE_DAY, SERVER_CACHE_ONE_MINUTE } from "@/lib/constants";
 import { Component, RestService } from "@/lib/service/core";
 
-export class RestAPIService extends Component {
+export class DatamallRestAPIService extends Component {
   headers = {
     AccountKey: process.env.DATAMALL_APIKEY || "",
     accept: "application/json",
