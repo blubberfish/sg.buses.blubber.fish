@@ -14,7 +14,7 @@ function tryParse(s?: string | null) {
 }
 
 export async function GET(request: Request) {
-  const skipParam = new URL(request.url).searchParams.get("$skip");
+  const skipParam = new URL(request.url).searchParams.get("skip");
   return service
     .find(DatamallRestAPIService)
     .getBusRoutes({ skip: tryParse(skipParam) });

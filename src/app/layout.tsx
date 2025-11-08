@@ -1,6 +1,7 @@
 import { DashboardContainer } from "@/lib/components/dashboard/container";
 import { DashboardHeader } from "@/lib/components/dashboard/header";
-import { Bus, Heart } from "lucide-react";
+import { Loaders } from "@/lib/service/datamall/client/react";
+import { Bus } from "lucide-react";
 import type { Metadata } from "next";
 import { SideBar } from "./_components/side-bar";
 import { SideBarButton } from "./_components/side-bar/button";
@@ -20,6 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="min-h-svh w-screen bg-neutral-900 text-white/80">
+        <Loaders />
         <DashboardContainer>
           <DashboardHeader>
             <h1 className="ml-9">Blubberfish</h1>
