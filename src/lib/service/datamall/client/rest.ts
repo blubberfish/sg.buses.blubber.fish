@@ -6,6 +6,12 @@ export class DatamallRestAPIService extends Component {
     return restService.server(document.location.href);
   }
 
+  getBusArrivals(locationId: string) {
+    return this.provider.get("/api/v1/datamall/arrival", {
+      search: new URLSearchParams([["code", locationId]]),
+    });
+  }
+
   getBusStops(offset?: number) {
     return this.provider.get("/api/v1/datamall/locations", {
       search: new URLSearchParams([["skip", (offset || 0).toFixed(0)]]),
