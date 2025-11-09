@@ -1,6 +1,6 @@
 import { DashboardContainer } from "@/lib/components/dashboard/container";
 import { DashboardHeader } from "@/lib/components/dashboard/header";
-import { Loaders } from "@/lib/service/datamall/client/react";
+import { Loaders } from "@/lib/react/datamall";
 import { Bus } from "lucide-react";
 import type { Metadata } from "next";
 import { SideBar } from "./_components/side-bar";

@@ -26,6 +26,12 @@ export class Component extends EventTarget {
 
   #registry = new Map<string, Component>();
 
+  #mergeRegistry(...source: Map<string, Component>[]): (typeof source)[number] {
+    return new Map(
+      source.flatMap((registry) => Array.from(registry.entries()))
+    );
+  }
+
   register<T extends Component, Ctor extends { new (...args: any[]): T }>(
     component: Ctor,
     ...args: ConstructorParameters<Ctor>

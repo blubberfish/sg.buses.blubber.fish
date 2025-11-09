@@ -1,7 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useDatamall } from "./context";
-import { DatamallBusStopService } from "../bus-stops";
+import { useDatamall } from "../context";
+import { DatamallBusStopService } from "@/lib/service/datamall/client";
+import { Notification } from "./notification";
 
 export function BusStopLoader({ onReady }: { onReady?: { (): void } }) {
   const datamall = useDatamall();
@@ -27,10 +28,5 @@ export function BusStopLoader({ onReady }: { onReady?: { (): void } }) {
 
   if (ready) return null;
 
-  return (
-    <div className="px-3 py-1 flex flex-row flex-nowrap items-center gap-x-3 bg-gray-600 text-neutral-100 rounded">
-      <div className="size-3 border-2 border-purple-400 border-t-violet-300 rounded-full animate-spin" />
-      <p>Loading bus stops...</p>
-    </div>
-  );
+  return <Notification content="Loading bus stops" />;
 }

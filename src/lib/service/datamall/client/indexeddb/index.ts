@@ -62,7 +62,7 @@ export class IDBService extends Component {
   ) {
     const database = await this.client;
     const transaction = database.transaction(store, "readonly");
-    return new Promise<T>((resolve, reject) => {
+    return new Promise<T | null>((resolve, reject) => {
       const collection = transaction.objectStore(store);
       const request = params.index
         ? collection.index(params.index).get(params.filter)
