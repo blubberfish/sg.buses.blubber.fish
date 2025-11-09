@@ -2,7 +2,6 @@
 import { DatamallBusRoutesService } from "@/lib/service/datamall/client";
 import { useEffect } from "react";
 import { useDatamall } from "../context";
-import { Notification } from "./notification";
 
 export function BusRouteLoader() {
   const { getDataState, getService, updateDataState } = useDatamall();
@@ -45,13 +44,5 @@ export function BusRouteLoader() {
     };
   }, [getService, routes, updateDataState]);
 
-  return (
-    <Notification
-      content={
-        routes === "loading"
-          ? "Loading bus routes"
-          : "Checking for bus route updates"
-      }
-    />
-  );
+  return null;
 }

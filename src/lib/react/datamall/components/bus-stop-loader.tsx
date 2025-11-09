@@ -1,32 +1,41 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDatamall } from "../context";
 import { DatamallBusStopService } from "@/lib/service/datamall/client";
-import { Notification } from "./notification";
 
 export function BusStopLoader({ onReady }: { onReady?: { (): void } }) {
-  const datamall = useDatamall();
-  const [ready, setReady] = useState(false);
+  const { getDataState, getService, updateDataState } = useDatamall();
+
+  const { locations } = getDataState();
 
   useEffect(() => {
+    if (locations === "ready") return;
     let cancel = false;
-    const service = datamall.find(DatamallBusStopService);
-    service.addEventListener(
-      DatamallBusStopService.EVENT_READY,
-      () => {
-        if (cancel) return;
-        setReady(true);
-        onReady?.();
-      },
-      { once: true }
-    );
+    const service = getService().find(DatamallBusStopService);
+    const onReady = () => {
+      if (cancel) return;
+      updateDataState("locations", "ready");
+    };
+    service.addEventListener(DatamallBusStopService.EVENT_READY, onReady, {
+      once: true,
+    });
+    const onRefresh = () => {
+      if (cancel) return;
+      updateDataState("locations", "refreshing");
+    };
+    service.addEventListener(DatamallBusStopService.EVENT_REFRESH, onRefresh, {
+      once: true,
+    });
     service.setup();
     return () => {
       cancel = true;
+      service.removeEventListener(DatamallBusStopService.EVENT_READY, onReady);
+      service.removeEventListener(
+        DatamallBusStopService.EVENT_REFRESH,
+        onRefresh
+      );
     };
-  }, [datamall, onReady]);
+  }, [locations, getService, updateDataState]);
 
-  if (ready) return null;
-
-  return <Notification content="Loading bus stops" />;
+  return null;
 }
