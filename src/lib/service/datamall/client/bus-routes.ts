@@ -3,11 +3,7 @@ import { Component } from "@/lib/service/core";
 import { IDBService } from "./indexeddb";
 import { DATABASE_DESCRIPTOR } from "./indexeddb/config";
 import { DatamallRestAPIService } from "./rest";
-
-interface MetaRecord {
-  category: string;
-  timestamp: number;
-}
+import { MetaRecord } from './common'
 
 export class DatamallBusRoutesService extends Component {
   static EVENT_STATUS_READY = "service:status:ready";
