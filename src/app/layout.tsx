@@ -30,7 +30,14 @@ export default function RootLayout({
           <ShowSideBarAction />
         </TopBar>
         <BusInfoLoaders>{children}</BusInfoLoaders>
-        <SideBar></SideBar>
+        <SideBar>
+          <a className="block px-9 py-3 hover:text-blue-300" href="favorites">
+            Favorites
+          </a>
+          <a className="block px-9 py-3 hover:text-blue-300" href="location">
+            Browse stops
+          </a>
+        </SideBar>
       </App>
     </html>
   );
