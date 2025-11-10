@@ -92,3 +92,5 @@ export function BusInfoLoaders({ children }: PropsWithChildren) {
     </DatamallContext.Provider>
   );
 }
+
+export { useDatamall } from "./context";

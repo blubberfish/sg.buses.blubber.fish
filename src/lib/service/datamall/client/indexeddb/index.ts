@@ -78,18 +78,23 @@ export class IDBService extends Component {
 
   async queryMany<T>(
     store: string,
-    params: { index?: string; startAt?: number; filter: IDBValidKey | IDBKeyRange }
+    params: {
+      index?: string;
+      startAt?: number;
+      limit?: number;
+      filter?: IDBValidKey | IDBKeyRange;
+    } = {}
   ) {
     const database = await this.client;
     const transaction = database.transaction(store, "readonly");
-    return new Promise<T[]>((resolve, reject) => {
+    return new Promise<T[]>((resolve) => {
       const collection = transaction.objectStore(store);
-      const { filter, index } = params;
+      const { filter, index, limit, startAt } = params;
       const result = [] as T[];
       const request = index
         ? collection.index(index).openCursor(filter)
         : collection.openCursor(filter);
-      let skipped = Math.max(params.startAt ?? 0, 0);
+      let skipped = Math.max(startAt ?? 0, 0);
       request.onsuccess = () => {
         const cursor = request.result;
         if (!cursor) {
@@ -102,7 +107,9 @@ export class IDBService extends Component {
           return;
         }
         result.push(cursor.value);
-        cursor.continue()
+        if (result.length < Math.max(limit || 10, 1)) cursor.continue();
+        resolve(result);
+        return;
       };
     });
   }

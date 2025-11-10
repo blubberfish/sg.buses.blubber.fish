@@ -1,5 +1,6 @@
 import { ONE_DAY } from "@/lib/constants";
 import { Component } from "@/lib/service/core";
+import { BusStopInfo } from "@/lib/service/datamall/types/model";
 import { IDBService } from "./indexeddb";
 import { DATABASE_DESCRIPTOR } from "./indexeddb/config";
 import { DatamallRestAPIService } from "./rest";
@@ -27,14 +28,10 @@ export class DatamallBusStopService extends Component {
 
         this.#lastRecord = record?.timestamp;
         if (this.#lastRecord && Date.now() - this.#lastRecord < ONE_DAY) {
-          this.dispatchEvent(
-            new Event(DatamallBusStopService.EVENT_READY)
-          );
+          this.dispatchEvent(new Event(DatamallBusStopService.EVENT_READY));
           return;
         } else if (this.#lastRecord) {
-          this.dispatchEvent(
-            new Event(DatamallBusStopService.EVENT_REFRESH)
-          );
+          this.dispatchEvent(new Event(DatamallBusStopService.EVENT_REFRESH));
         }
 
         let offset = 0;
@@ -65,5 +62,15 @@ export class DatamallBusStopService extends Component {
         })
       );
     });
+  }
+
+  async list(offset?: number) {
+    const db = this.find(IDBService);
+    return await db.queryMany<BusStopInfo>(
+      DATABASE_DESCRIPTOR.BUS_STOPS.store,
+      {
+        startAt: offset ?? 0,
+      }
+    );
   }
 }
