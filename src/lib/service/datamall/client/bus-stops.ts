@@ -70,6 +70,7 @@ export class DatamallBusStopService extends Component {
       DATABASE_DESCRIPTOR.BUS_STOPS.store,
       {
         startAt: offset ?? 0,
+        limit: 10,
       }
     );
   }

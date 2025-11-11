@@ -35,7 +35,7 @@ export default function RootLayout({
             Favorites
           </a>
           <a className="block px-9 py-3 hover:text-blue-300" href="location">
-            Browse stops
+            Browse locations
           </a>
         </SideBar>
       </App>

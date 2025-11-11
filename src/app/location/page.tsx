@@ -1,3 +1,5 @@
+import { List } from "./_components";
+
 export default function Page() {
-  return null;
+  return <List />;
 }

@@ -84,10 +84,10 @@ export class IDBService extends Component {
       limit?: number;
       filter?: IDBValidKey | IDBKeyRange;
     } = {}
-  ) {
+  ): Promise<{ next: boolean; data: T[] }> {
     const database = await this.client;
     const transaction = database.transaction(store, "readonly");
-    return new Promise<T[]>((resolve) => {
+    return new Promise<{ next: boolean; data: T[] }>((resolve) => {
       const collection = transaction.objectStore(store);
       const { filter, index, limit, startAt } = params;
       const result = [] as T[];
@@ -98,7 +98,11 @@ export class IDBService extends Component {
       request.onsuccess = () => {
         const cursor = request.result;
         if (!cursor) {
-          resolve(result);
+          resolve({ next: false, data: result });
+          return;
+        }
+        if (result.length >= Math.max(limit ?? 1, 1)) {
+          resolve({ next: true, data: result });
           return;
         }
         if (skipped > 0) {
@@ -107,8 +111,7 @@ export class IDBService extends Component {
           return;
         }
         result.push(cursor.value);
-        if (result.length < Math.max(limit || 10, 1)) cursor.continue();
-        resolve(result);
+        cursor.continue();
         return;
       };
     });
