@@ -6,7 +6,7 @@ function Container({ children }: PropsWithChildren) {
 }
 
 function Title(props: PropsWithChildren<LinkProps>) {
-  return <Link className="text-lg text-ellipsis overflow-hidden hover:text-blue-300 hover:underline" {...props} />;
+  return <Link className="text-lg text-ellipsis overflow-hidden text-violet-300 hover:text-blue-300 hover:underline" {...props} />;
 }
 
 function TitleSkeleton() {

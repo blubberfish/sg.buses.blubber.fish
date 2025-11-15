@@ -13,7 +13,7 @@ export function List() {
 
   const [loading, setLoading] = useState<
     undefined | ReturnType<(typeof service)["list"]>
-  >(service.list());
+  >();
   const [entities, setEntities] = useState<BusStopInfo[]>();
   const [disableLoad, setDisableLoad] = useState(false);
 

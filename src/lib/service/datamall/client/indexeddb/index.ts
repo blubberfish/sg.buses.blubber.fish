@@ -14,25 +14,27 @@ export class IDBService extends Component {
     return (this.constructor as typeof IDBService).version;
   }
 
-  client: Promise<IDBDatabase>;
+  #client?: Promise<IDBDatabase>;
 
-  constructor() {
-    super();
-    this.client = new Promise<IDBDatabase>((resolve, reject) => {
-      const request = indexedDB.open(this.database, this.version);
-      request.onsuccess = () => {
-        resolve(request.result);
-      };
-      request.onerror = () => {
-        reject(request.error);
-      };
-      request.onupgradeneeded = ({ newVersion, oldVersion }) => {
-        console.log({ oldVersion, newVersion });
-        for (let i = oldVersion + 1; i <= (newVersion || 1); i++) {
-          VERSIONS[i](request.result);
-        }
-      };
-    });
+  get client() {
+    if (!this.#client) {
+      this.#client = new Promise<IDBDatabase>((resolve, reject) => {
+        const request = indexedDB.open(this.database, this.version);
+        request.onsuccess = () => {
+          resolve(request.result);
+        };
+        request.onerror = () => {
+          reject(request.error);
+        };
+        request.onupgradeneeded = ({ newVersion, oldVersion }) => {
+          console.log({ oldVersion, newVersion });
+          for (let i = oldVersion + 1; i <= (newVersion || 1); i++) {
+            VERSIONS[i](request.result);
+          }
+        };
+      });
+    }
+    return this.#client;
   }
 
   async put<T>(store: string, ...items: T[]) {
