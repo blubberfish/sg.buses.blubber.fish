@@ -74,4 +74,25 @@ export class DatamallBusStopService extends Component {
       }
     );
   }
+
+  async only(query: { boundingBox: number[][] }) {
+    const db = this.find(IDBService);
+
+    const { boundingBox } = query;
+    const filter = IDBKeyRange.bound(boundingBox[0], boundingBox[1]);
+    const result = await db.queryMany<BusStopInfo>(
+      DATABASE_DESCRIPTOR.BUS_STOPS.store,
+      {
+        filter,
+        index: DATABASE_DESCRIPTOR.BUS_STOPS.indexes.SPATIAL.index,
+      }
+    );
+    return result.data.filter(
+      (datum) =>
+        datum.Longitude >= boundingBox[0][0] &&
+        datum.Longitude <= boundingBox[1][0] &&
+        datum.Latitude >= boundingBox[0][1] &&
+        datum.Latitude <= boundingBox[1][1]
+    );
+  }
 }

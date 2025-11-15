@@ -103,7 +103,7 @@ export class IDBService extends Component {
           resolve({ next: false, data: result });
           return;
         }
-        if (result.length >= Math.max(limit ?? 1, 1)) {
+        if (limit && result.length >= Math.max(limit, 1)) {
           resolve({ next: true, data: result });
           return;
         }
