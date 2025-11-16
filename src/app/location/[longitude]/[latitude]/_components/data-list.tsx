@@ -43,7 +43,7 @@ function RenderList({
 
   if (!data) return null;
   return (
-    <div className="grid grid-cols-1 auto-rows-min sm:px-6 md:p-9 sm:gap-y-3 md:gap-y-6 lg:gap-y-9">
+    <div className="grid grid-cols-1 auto-rows-min sm:gap-y-3 md:gap-y-6 lg:gap-y-9">
       {data.map(({ BusStopCode, Description, RoadName }) => (
         <div className="p-9 bg-gray-900 rounded" key={BusStopCode}>
           <header className="flex flex-row flex-nowrap items-center">

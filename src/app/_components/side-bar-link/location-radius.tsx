@@ -22,7 +22,18 @@ export function LocationRadiusSideBarLink() {
     let cancel = false;
     pending.then((coords) => {
       if (cancel) return;
-      router.push(`/location/${coords.join("/")}`);
+      router.push(
+        `/location/${coords.join("/")}?${new URLSearchParams([
+          [
+            "state",
+            btoa(
+              JSON.stringify({
+                type: "radius",
+              })
+            ).replaceAll("=", ""),
+          ],
+        ])}`
+      );
     });
     return () => {
       cancel = true;
