@@ -5,8 +5,13 @@ import {
   SideBar,
   TopBar,
 } from "@/lib/react/layout/app";
+import { Bus, Heart } from "lucide-react";
 import type { Metadata } from "next";
 import "./globals.css";
+import {
+  GenericSideBarLink,
+  LocationRadiusSideBarLink,
+} from "./_components/side-bar-link";
 
 export const metadata: Metadata = {
   title: "SG @ BlubberFish",
@@ -31,12 +36,15 @@ export default function RootLayout({
         </TopBar>
         <BusInfoLoaders>{children}</BusInfoLoaders>
         <SideBar>
-          <a className="block px-9 py-3 hover:text-blue-300" href="favorites">
-            Favorites
-          </a>
-          <a className="block px-9 py-3 hover:text-blue-300" href="location">
-            Browse locations
-          </a>
+          <GenericSideBarLink href="location">
+            <Bus />
+            <span className="ml-3">Bus stops</span>
+          </GenericSideBarLink>
+          <GenericSideBarLink href="favorites">
+            <Heart />
+            <span className="ml-3">Favorites</span>
+          </GenericSideBarLink>
+          <LocationRadiusSideBarLink />
         </SideBar>
       </App>
     </html>
