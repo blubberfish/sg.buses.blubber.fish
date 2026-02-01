@@ -14,7 +14,7 @@ function tryParseInt(s?: string | null) {
   }
 }
 
-export const revalidate = 30 * 24 * 60 * 60;
+export const revalidate = 2592000;
 
 export async function GET(request: NextRequest) {
   return Response.json(

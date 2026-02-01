@@ -13,7 +13,7 @@ export async function loadRoutes({
   if (meta?.lastUpdated && Date.now() - meta.lastUpdated < THIRTY_DAYS) {
     return;
   }
-  const url = new URL("/api/v1/datamall/bus/route", window.location.origin);
+  const url = new URL("/api/v1/datamall/bus-route", window.location.origin);
   url.searchParams.set("$skip", offset.toString(10));
   const response = await fetch(url, { method: "GET" });
   const { value } = (await response.json()) as Values<BusRouteInfo>;
