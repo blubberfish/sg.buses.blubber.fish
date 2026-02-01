@@ -29,7 +29,7 @@ export function api() {
       const response = await fetch(url.toString(), {
         headers: CONFIG.HEADERS,
         next: {
-          revalidate: 30 * 24 * 60 * 60,
+          revalidate: 2592000,
         },
       });
       if (!response.ok) throw new DatamallAPIError("Failed to fetch routes");
@@ -41,7 +41,7 @@ export function api() {
       const response = await fetch(url.toString(), {
         headers: CONFIG.HEADERS,
         next: {
-          revalidate: 30 * 24 * 60 * 60,
+          revalidate: 2592000,
         },
       });
       if (!response.ok)
@@ -54,7 +54,7 @@ export function api() {
       const response = await fetch(url.toString(), {
         headers: CONFIG.HEADERS,
         next: {
-          revalidate: 30 * 24 * 60 * 60,
+          revalidate: 2592000,
         },
       });
       if (!response.ok) throw new DatamallAPIError("Failed to fetch bus stops");
@@ -66,7 +66,7 @@ export function api() {
       const response = await fetch(url.toString(), {
         headers: CONFIG.HEADERS,
         next: {
-          revalidate: 2 * 60,
+          revalidate: 120,
         },
       });
       if (!response.ok) throw new DatamallAPIError("Failed to fetch bus stops");
