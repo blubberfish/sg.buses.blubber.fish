@@ -1,17 +1,10 @@
-import { BusInfoLoaders } from "@/lib/react/datamall";
-import {
-  App,
-  ShowSideBarAction,
-  SideBar,
-  TopBar,
-} from "@/lib/react/layout/app";
-import { Bus, Heart } from "lucide-react";
+import { AppProvider } from "@/components/providers/app";
+import { DatamallProvider } from "@/components/providers/datamall";
+import { PageHeader } from "@/components/page/header";
+import { PageMenuLink } from "@/components/page/menu/link";
 import type { Metadata } from "next";
+
 import "./globals.css";
-import {
-  GenericSideBarLink,
-  LocationRadiusSideBarLink,
-} from "./_components/side-bar-link";
 
 export const metadata: Metadata = {
   title: "SG @ BlubberFish",
@@ -25,28 +18,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <App>
-        <TopBar
-          className={(css) =>
-            [css, "flex flex-row flex-nowrap items-center"].join(" ")
-          }
-        >
-          <div className="flex-1"></div>
-          <ShowSideBarAction />
-        </TopBar>
-        <BusInfoLoaders>{children}</BusInfoLoaders>
-        <SideBar>
-          <GenericSideBarLink href="location">
-            <Bus />
-            <span className="ml-3">Bus stops</span>
-          </GenericSideBarLink>
-          <GenericSideBarLink href="favorites">
-            <Heart />
-            <span className="ml-3">Favorites</span>
-          </GenericSideBarLink>
-          <LocationRadiusSideBarLink />
-        </SideBar>
-      </App>
+      <body className="bg-gray-700 text-white">
+        <AppProvider>
+          <DatamallProvider>
+            <PageHeader>
+              <section className="flex flex-col py-3">
+                <PageMenuLink href="/search/favorites">Favorites</PageMenuLink>
+                <PageMenuLink href="/search/nearest">Around Me</PageMenuLink>
+              </section>
+            </PageHeader>
+            {children}
+          </DatamallProvider>
+        </AppProvider>
+      </body>
     </html>
   );
 }
