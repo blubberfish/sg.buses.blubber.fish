@@ -1,4 +1,3 @@
-import { Heart } from "lucide-react";
 import { type PropsWithChildren } from "react";
 import { FavoriteButton } from "./favorite-button";
 
