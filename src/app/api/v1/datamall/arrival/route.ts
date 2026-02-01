@@ -1,21 +1,9 @@
-import { SERVER_CACHE_ONE_MINUTE } from '@/lib/constants'
+import service, { DatamallRestAPIService } from "@/lib/service/datamall/server";
 
 export async function GET(request: Request) {
   const code = new URL(request.url).searchParams.get("code");
-  const target = new URL(
-    "https://datamall2.mytransport.sg/ltaodataservice/v3/BusArrival"
-  );
-  if (code) {
-    target.searchParams.set("BusStopCode", code);
+  if (!code) {
+    return Response.json({}, { status: 400 });
   }
-  return fetch(target, {
-    method: "GET",
-    headers: {
-      AccountKey: process.env.DATAMALL_APIKEY || "",
-      accept: "application/json",
-    },
-    next: {
-      revalidate: SERVER_CACHE_ONE_MINUTE,
-    },
-  });
+  return service.find(DatamallRestAPIService).getBusArrival({ id: code || "" });
 }
