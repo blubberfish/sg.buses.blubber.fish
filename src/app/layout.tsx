@@ -20,7 +20,13 @@ export default function RootLayout({
     <html lang="en">
       <body className="bg-gray-700 text-white">
         <AppProvider>
-          <DatamallProvider>
+          <DatamallProvider
+            fallback={
+              <div className="h-dvh w-dvw flex flex-row items-center-safe justify-center-safe">
+                <div className="size-6 rounded-full border-3 border-blue-300 border-t-gray-900 animate-spin" />
+              </div>
+            }
+          >
             <PageHeader>
               <section className="flex flex-col py-3">
                 <PageMenuLink href="/search/favorites">Favorites</PageMenuLink>

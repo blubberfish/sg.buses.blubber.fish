@@ -1,6 +1,15 @@
-export function Meta({ content }: {content?: string | null}) {
-  if (!content) {
-    return null
+export function Meta({
+  content,
+  skeleton,
+}: {
+  content?: string | null;
+  skeleton?: boolean;
+}) {
+  if (skeleton) {
+    return <p className="text-gray-400">&nbsp;</p>;
   }
-  return <p className="text-gray-400">{content}</p>
+  if (!content) {
+    return null;
+  }
+  return <p className="text-gray-400">{content}</p>;
 }

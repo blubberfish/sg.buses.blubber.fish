@@ -14,11 +14,20 @@ export function LocationLink({
   latitudeQuery,
   longitudeQuery,
   children,
+  skeleton,
 }: PropsWithChildren<{
   labelQuery: string;
   longitudeQuery: number;
   latitudeQuery: number;
+  skeleton?: boolean;
 }>) {
+  if (skeleton) {
+    return (
+      <Link className="text-lg" href="" prefetch={false}>
+        &nbsp;
+      </Link>
+    );
+  }
   return (
     <Link
       className="text-lg hover:underline"

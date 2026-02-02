@@ -1,5 +1,9 @@
+import { Suspense } from "react";
 import { LocationLink } from "./_components/link";
 import { List } from "./_components/list";
+import { Card } from "./_components/card/container";
+import { ResultsSection } from "./_components/section/results";
+import { TitleSection } from "./_components/section/title";
 import { Meta } from "./_components/meta";
 
 function coerceToString(value: string | string[] | undefined): string {
@@ -22,51 +26,72 @@ export default async function Page({
 }) {
   const search = await searchParams;
   return (
-    <List
-      address={coerceToString(search["address"])}
-      longitude={validateAsNumber(coerceToString(search["longitude"]))}
-      latitude={validateAsNumber(coerceToString(search["latitude"]))}
-      renderData={({ result, query }) => {
-        return (
-          <>
-            <section className="container mx-auto px-9 my-6">
-              <h1 className="text-sm text-gray-400">
-                Search results for&nbsp;
-                <span className="text-lg text-gray-200">{query.address}</span>
-              </h1>
-            </section>
-            <section className="container mx-auto px-9 my-6">
-              {result.length > 0 &&
-                result.map(({ PlaceId, Place }) => (
-                  <div className="my-3 p-3 rounded bg-gray-800" key={PlaceId}>
-                    <LocationLink
-                      labelQuery={`${Place.AddressNumber} ${Place.Street}, ${[
-                        Place.Region,
-                        Place.SubRegion,
-                      ]
-                        .filter(Boolean)
-                        .join(", ")} ${Place.PostalCode}`}
-                      latitudeQuery={Place.Geometry.Point[1]}
-                      longitudeQuery={Place.Geometry.Point[0]}
-                    >
-                      {Place.AddressNumber} {Place.Street}
-                    </LocationLink>
-                    <Meta
-                      content={[Place.Neighborhood, Place.Municipality]
-                        .filter(Boolean)
-                        .join(", ")}
-                    />
-                    <Meta
-                      content={[Place.Region, Place.SubRegion, Place.PostalCode]
-                        .filter(Boolean)
-                        .join(", ")}
-                    />
-                  </div>
-                ))}
-            </section>
-          </>
-        );
-      }}
-    />
+    <Suspense
+      fallback={
+        <>
+          <TitleSection data="" skeleton />
+          <ResultsSection>
+            {new Array(5).fill(0).map((_, index) => (
+              <Card key={index} skeleton>
+                <LocationLink
+                  labelQuery=""
+                  longitudeQuery={0}
+                  latitudeQuery={0}
+                  skeleton
+                />
+                <Meta skeleton />
+                <Meta skeleton />
+              </Card>
+            ))}
+          </ResultsSection>
+        </>
+      }
+    >
+      <List
+        address={coerceToString(search["address"])}
+        longitude={validateAsNumber(coerceToString(search["longitude"]))}
+        latitude={validateAsNumber(coerceToString(search["latitude"]))}
+        renderData={({ result, query }) => {
+          return (
+            <>
+              <TitleSection data={query.address} />
+              <ResultsSection>
+                {result.length > 0 &&
+                  result.map(({ PlaceId, Place }) => (
+                    <Card key={PlaceId}>
+                      <LocationLink
+                        labelQuery={`${Place.AddressNumber} ${Place.Street}, ${[
+                          Place.Region,
+                          Place.SubRegion,
+                        ]
+                          .filter(Boolean)
+                          .join(", ")} ${Place.PostalCode}`}
+                        latitudeQuery={Place.Geometry.Point[1]}
+                        longitudeQuery={Place.Geometry.Point[0]}
+                      >
+                        {Place.AddressNumber} {Place.Street}
+                      </LocationLink>
+                      <Meta
+                        content={[Place.Neighborhood, Place.Municipality]
+                          .filter(Boolean)
+                          .join(", ")}
+                      />
+                      <Meta
+                        content={[
+                          Place.Region,
+                          Place.SubRegion,
+                          Place.PostalCode,
+                        ]
+                          .filter(Boolean)
+                          .join(", ")}
+                      />
+                    </Card>
+                  ))}
+              </ResultsSection>
+            </>
+          );
+        }}
+      />
+    </Suspense>
   );
 }
