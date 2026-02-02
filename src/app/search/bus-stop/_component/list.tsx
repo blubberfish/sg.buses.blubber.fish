@@ -128,7 +128,22 @@ export function List({ center }: { center: number[] }) {
   }, [center, db, getReport]);
 
   if (!data || !!pending) {
-    return <Skeleton />;
+    return (
+      <>
+        <Card skeleton>
+          <CardHeader skeleton />
+          <GeneralDetails skeleton>
+            <MoreDetails skeleton />
+          </GeneralDetails>
+        </Card>
+        <Card skeleton>
+          <CardHeader skeleton />
+          <GeneralDetails skeleton>
+            <MoreDetails skeleton />
+          </GeneralDetails>
+        </Card>
+      </>
+    );
   }
   return (
     <>

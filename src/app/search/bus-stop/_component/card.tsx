@@ -1,8 +1,19 @@
 import { type PropsWithChildren } from "react";
 import { FavoriteButton } from "./favorite-button";
 
-export function Card({ children }: PropsWithChildren) {
-  return <div className="bg-gray-800 text-white rounded">{children}</div>;
+export function Card({
+  children,
+  skeleton,
+}: PropsWithChildren<{ skeleton?: boolean }>) {
+  return (
+    <div
+      className={`text-white rounded ${
+        skeleton ? "bg-neutral-400 animate-pulse" : "bg-gray-800 "
+      }`}
+    >
+      {children}
+    </div>
+  );
 }
 
 export function CardHeader(
@@ -22,12 +33,8 @@ export function CardHeader(
       <div className="flex flex-col flex-1">
         {"skeleton" in props ? (
           <>
-            <div className="max-w-full w-sm text-lg bg-neutral-400 rounded animate-pulse">
-              &nbsp;
-            </div>
-            <div className="max-w-full w-xs text-sm bg-neutral-400 rounded animate-pulse">
-              &nbsp;
-            </div>
+            <div className="text-lg">&nbsp;</div>
+            <div className="text-sm">&nbsp;</div>
           </>
         ) : (
           <>
@@ -40,7 +47,9 @@ export function CardHeader(
           </>
         )}
       </div>
-      <FavoriteButton id={"id" in props ? props.id : undefined} />
+      {"skeleton" in props ? null : (
+        <FavoriteButton id={"id" in props ? props.id : undefined} />
+      )}
     </header>
   );
 }
