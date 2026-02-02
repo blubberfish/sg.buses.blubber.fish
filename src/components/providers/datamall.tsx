@@ -21,7 +21,10 @@ import {
   loadStops,
 } from "../../components/datamall/loaders/factory";
 
-export function DatamallProvider({ children }: PropsWithChildren) {
+export function DatamallProvider({
+  children,
+  fallback,
+}: PropsWithChildren<{ fallback?: React.ReactNode }>) {
   const [db, setDb] = useState<IDatamallContext["db"]>();
   useEffect(() => {
     const db = new DatamallDB().setup((builder) => {
@@ -86,7 +89,7 @@ export function DatamallProvider({ children }: PropsWithChildren) {
           setReady((current) => current | 0x4);
         }}
       />
-      {!!(ready & 0x7) ? children : "LOADING"}
+      {((ready & 0x7) === 0x7) ? children : fallback}
     </DatamallContext.Provider>
   );
 }
