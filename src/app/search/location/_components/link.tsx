@@ -11,11 +11,13 @@ function formatQuery(params: Record<string, string | number>) {
 
 export function LocationLink({
   labelQuery,
+  altLabel,
   latitudeQuery,
   longitudeQuery,
   children,
   skeleton,
 }: PropsWithChildren<{
+  altLabel: string;
   labelQuery: string;
   longitudeQuery: number;
   latitudeQuery: number;
@@ -34,6 +36,7 @@ export function LocationLink({
       href={`${BASE_PATH}?${formatQuery({
         meta: `${labelQuery}@ln${longitudeQuery},la${latitudeQuery}`,
       })}`}
+      title={altLabel}
     >
       {children}
     </Link>

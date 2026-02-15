@@ -4,6 +4,8 @@ import { FavoriteButton } from "./_components/favorite-button";
 import { StopDescription } from "./_components/stop-description";
 import { StopLabel } from "./_components/stop-label";
 
+export const revalidate = 60;
+
 export default async function Page({
   params,
 }: {
