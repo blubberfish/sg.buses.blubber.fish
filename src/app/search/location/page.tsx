@@ -34,6 +34,7 @@ export default async function Page({
             {new Array(5).fill(0).map((_, index) => (
               <Card key={index} skeleton>
                 <LocationLink
+                  altLabel=""
                   labelQuery=""
                   longitudeQuery={0}
                   latitudeQuery={0}
@@ -60,16 +61,17 @@ export default async function Page({
                   result.map(({ PlaceId, Place }) => (
                     <Card key={PlaceId}>
                       <LocationLink
-                        labelQuery={`${Place.AddressNumber} ${Place.Street}, ${[
+                        altLabel={`${Place.AddressNumber} ${Place.Street}, ${[
                           Place.Region,
                           Place.SubRegion,
                         ]
                           .filter(Boolean)
                           .join(", ")} ${Place.PostalCode}`}
+                        labelQuery={Place.Label}
                         latitudeQuery={Place.Geometry.Point[1]}
                         longitudeQuery={Place.Geometry.Point[0]}
                       >
-                        {Place.AddressNumber} {Place.Street}
+                        {Place.Label}
                       </LocationLink>
                       <Meta
                         content={[Place.Neighborhood, Place.Municipality]

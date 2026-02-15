@@ -159,7 +159,7 @@ export function List({ center }: { center: number[] }) {
             <CardList>
               {buses.map((bus) => (
                 <GeneralDetails
-                  key={bus.id}
+                  key={[bus.id, bus.destinationId].join("@")}
                   label={bus.id}
                   description={<Destination id={bus.destinationId} />}
                 >

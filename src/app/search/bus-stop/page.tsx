@@ -39,7 +39,7 @@ export default async function Page({
     <>
       <section className="container mx-auto px-9 py-6">
         <h1 className="text-sm text-gray-400">
-          Showing bus-stops around&nbsp;
+          Showing bus-stops around<br/>
           <span className="text-lg text-gray-200">{label}</span>
         </h1>
       </section>
