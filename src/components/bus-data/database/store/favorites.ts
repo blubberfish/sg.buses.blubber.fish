@@ -8,6 +8,7 @@ export interface IFavoriteEntry {
 export class FavoritesStore extends DataStore {
   static readonly N = "@fav";
   static readonly I_CATEGORY = "@cat";
+  static readonly CAT_BUS_STOP = "bus-stop";
 
   override get upgrader() {
     return [

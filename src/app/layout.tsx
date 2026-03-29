@@ -19,20 +19,27 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-surface text-body">
-        <ClerkProvider>
-          <BusDataProvider>
-            <header className="">
-              <div className="flex flex-row items-center-safe">
-                <SideBar>
-                  <button className="p-3" type="button">
-                    <Menu className="size-4" />
-                  </button>
-                </SideBar>
-                <div className="flex-1"></div>
-              </div>
-              <div className="h-px -mt-px to-surface-b bg-linear-to-l" />
-            </header>
-          </BusDataProvider>
+        <ClerkProvider
+          appearance={{
+            cssLayerName: "clerk",
+          }}
+        >
+          <div className="min-h-screen flex flex-col">
+            <BusDataProvider>
+              <header className="">
+                <div className="flex flex-row items-center-safe">
+                  <SideBar>
+                    <button className="p-3" type="button">
+                      <Menu className="size-4" />
+                    </button>
+                  </SideBar>
+                  <div className="flex-1"></div>
+                </div>
+                <div className="h-px -mt-px to-surface-b bg-linear-to-l" />
+              </header>
+              {children}
+            </BusDataProvider>
+          </div>
         </ClerkProvider>
       </body>
     </html>

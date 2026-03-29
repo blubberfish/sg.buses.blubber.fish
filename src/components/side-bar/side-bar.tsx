@@ -31,7 +31,7 @@ export function SideBar({ children }: { children: JSX.Element }) {
     <>
       {clone}
       {visible && (
-        <div className="bg-surface-b text-white fixed inset-0 overflow-auto w-full md:w-sm transition-[width]">
+        <div className="bg-surface-b text-white fixed inset-0 z-50 overflow-auto w-full md:w-sm transition-[width]">
           <div className="min-h-dvh grid grid-cols-1 grid-rows-[min-content_1fr_min-content]">
             <header className="flex flex-row items-center-safe">
               <div className="flex-1"></div>
