@@ -24,22 +24,7 @@ export default function RootLayout({
             cssLayerName: "clerk",
           }}
         >
-          <div className="min-h-screen flex flex-col">
-            <BusDataProvider>
-              <header className="">
-                <div className="flex flex-row items-center-safe">
-                  <SideBar>
-                    <button className="p-3" type="button">
-                      <Menu className="size-4" />
-                    </button>
-                  </SideBar>
-                  <div className="flex-1"></div>
-                </div>
-                <div className="h-px -mt-px to-surface-b bg-linear-to-l" />
-              </header>
-              {children}
-            </BusDataProvider>
-          </div>
+          {children}
         </ClerkProvider>
       </body>
     </html>
