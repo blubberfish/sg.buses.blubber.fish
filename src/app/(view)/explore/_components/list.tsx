@@ -85,7 +85,7 @@ export function List({ center }: { center?: number[] | null }) {
             <h3 className="text-title text-lg rounded-t flex-1 px-3 py-2">
               <Link
                 className="hover:underline"
-                href={`/bus-stop/${busStop.BusStopCode}`}
+                href={`/explore/${busStop.BusStopCode}`}
               >
                 {busStop.Description}
               </Link>

@@ -4,6 +4,7 @@ import assert from "assert";
 import type {
   BusRouteInfo,
   BusServiceInfo,
+  BusStopArrivalInfo,
   BusStopInfo,
   Values,
 } from "./types";
@@ -75,4 +76,25 @@ export async function listBusServices({ offset }: { offset?: number } = {}) {
     );
   }
   return response.json() as Promise<Values<BusServiceInfo>>;
+}
+
+export async function getBusArrival(busStopCode: string) {
+  const target = new URL("/ltaodataservice/v3/BusArrival", DATAMALL_HOST!);
+  target.searchParams.set("BusStopCode", busStopCode);
+  const response = await fetch(target, {
+    method: "GET",
+    headers: {
+      AccountKey: DATAMALL_APIKEY!,
+      accept: "application/json",
+    },
+    next: {
+      revalidate: 120, // 2 minutes
+    },
+  });
+  if (!response.ok) {
+    throw new Error(
+      `${response.status} - ${response.statusText}\n${await response.text()}`,
+    );
+  }
+  return response.json() as Promise<BusStopArrivalInfo>;
 }
