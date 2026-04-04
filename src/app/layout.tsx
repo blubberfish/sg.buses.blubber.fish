@@ -1,7 +1,4 @@
-import { ClerkProvider, Show, SignInButton, UserAvatar } from "@clerk/nextjs";
-import { BusDataProvider } from "@/components/bus-data";
-import { SideBar } from "@/components/side-bar";
-import { Menu } from "lucide-react";
+import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 
 import "./globals.css";
