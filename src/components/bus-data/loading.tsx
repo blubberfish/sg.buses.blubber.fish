@@ -1,7 +1,13 @@
 "use client";
 
-import { Circle } from "lucide-react";
-import { useContext, useEffect, useState, useTransition } from "react";
+import { Circle, X } from "lucide-react";
+import {
+  type PropsWithChildren,
+  useContext,
+  useEffect,
+  useState,
+  useTransition,
+} from "react";
 import { listBusRoutes, listBusServices, listBusStops } from "./actions";
 import { BusDataContext, BusDataReadinessContext } from "./context";
 import {
@@ -24,6 +30,14 @@ function StatusIcon({ completed }: { completed?: boolean }) {
         .filter(Boolean)
         .join(" ")}
     />
+  );
+}
+
+function StatusContainer({ children }: PropsWithChildren) {
+  return (
+    <div className="col-span-full grid grid-cols-subgrid items-center px-3">
+      {children}
+    </div>
   );
 }
 
@@ -68,13 +82,13 @@ function LoadRoutes() {
   }, [db, routesReady]);
 
   return (
-    <div className="col-span-full grid grid-cols-subgrid items-center">
+    <StatusContainer>
       <StatusIcon completed={!isPending} />
       <h1>Bus routes</h1>
-      <aside className="text-caption hidden md:block">
-        {dataLoaded} data found
+      <aside className="text-white/67 hidden md:block">
+        {dataLoaded} data loaded
       </aside>
-    </div>
+    </StatusContainer>
   );
 }
 
@@ -119,13 +133,13 @@ function LoadServices() {
   }, [db, servicesReady]);
 
   return (
-    <div className="col-span-full grid grid-cols-subgrid items-center">
+    <StatusContainer>
       <StatusIcon completed={!isPending} />
       <h1>Bus services</h1>
-      <aside className="text-caption hidden md:block">
-        {dataLoaded} data found
+      <aside className="text-white/67 hidden md:block">
+        {dataLoaded} data loaded
       </aside>
-    </div>
+    </StatusContainer>
   );
 }
 
@@ -170,29 +184,31 @@ function LoadStops() {
   }, [db, stopsReady]);
 
   return (
-    <div className="col-span-full grid grid-cols-subgrid items-center">
+    <StatusContainer>
       <StatusIcon completed={!isPending} />
       <h1>Bus stops</h1>
-      <aside className="text-caption hidden md:block">
-        {dataLoaded} data found
+      <aside className="text-white/67 hidden md:block">
+        {dataLoaded} data loaded
       </aside>
-    </div>
+    </StatusContainer>
   );
 }
 
-export function LoadBusData() {
+export function LoadBusData({ children }: PropsWithChildren) {
   const { routes, services, stops } = useContext(BusDataReadinessContext);
 
-  if (routes && services && stops) {
-    return null;
+  const ready = routes && services && stops;
+
+  if (!ready) {
+    return (
+      <div className="bg-surface-b/67 text-white backdrop-blur fixed inset-0 z-50 grid grid-cols-[repeat(3,max-content)] auto-rows-min content-center-safe justify-center-safe gap-2">
+        <div className="col-span-full"></div>
+        {<LoadStops />}
+        {<LoadServices />}
+        {<LoadRoutes />}
+      </div>
+    );
   }
 
-  return (
-    <div className="text-xs grid grid-cols-[repeat(2,max-content)_1fr] gap-2 ">
-      <h1 className="col-span-full">Loading...</h1>
-      {!stops && <LoadStops />}
-      {!services && <LoadServices />}
-      {!routes && <LoadRoutes />}
-    </div>
-  );
+  return children;
 }
