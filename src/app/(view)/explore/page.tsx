@@ -20,10 +20,10 @@ export default async function Page({ searchParams }: PageProps<"/explore">) {
 
   return (
     <>
-      <header className="container mx-auto px-6">
+      <section className="container mx-auto px-6">
         <h1 className="text-xl text-caption">Explore bus stops</h1>
         {!!address && <aside>{address}</aside>}
-      </header>
+      </section>
       {longitude !== undefined && latitude !== undefined && (
         <List center={[longitude, latitude]} />
       )}

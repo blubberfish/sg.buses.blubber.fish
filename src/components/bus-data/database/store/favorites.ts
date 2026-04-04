@@ -78,7 +78,7 @@ export class FavoritesStore extends DataStore {
       const index = transaction
         .objectStore(FavoritesStore.N)
         .index(FavoritesStore.I_CATEGORY);
-      const request = index.getAll(data);
+      const request = index.getAll([data]);
       request.onsuccess = () => {
         resolve(request.result);
       };
