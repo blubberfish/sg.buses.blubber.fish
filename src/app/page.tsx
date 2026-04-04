@@ -28,16 +28,9 @@ export default function Page() {
           </section>
         </Form>
       </header>
-      <nav className="container mx-auto mt-6 px-6 grid grid-cols-2 gap-6">
+      <nav className="container mx-auto mt-6 px-6 grid grid-cols-1 gap-6">
         <Link
-          className="from-sky-600 to-sky-800 bg-linear-to-br text-white rounded shadow col-span-full md:col-span-1 px-6 py-4 flex flex-row items-center"
-          href="/explore"
-        >
-          <Earth className="size-7" />
-          <span className="ml-2">Explore</span>
-        </Link>
-        <Link
-          className="from-pink-600 to-pink-800 bg-linear-to-br text-white rounded shadow col-span-full md:col-span-1 px-6 py-4 flex flex-row items-center"
+          className="from-pink-100 to-pink-300 bg-linear-to-br text-pink-900 rounded shadow col-span-full md:col-span-1 px-6 py-4 flex flex-row items-center"
           href="/favorites"
         >
           <Heart className="size-7" />

@@ -129,7 +129,7 @@ export default async function Page({ searchParams }: PageProps<"/search">) {
                     </h2>
                     <Link
                       className="text-title text-sm rounded-full border w-max px-2 py-1 flex flex-row items-center gap-1"
-                      href={`/explore?${new URLSearchParams({ longitude: longitude.toString(), latitude: latitude.toString() }).toString()}`}
+                      href={`/explore?${new URLSearchParams({ address: Label, longitude: longitude.toString(), latitude: latitude.toString() }).toString()}`}
                     >
                       <BusFront className="size-4" />
                       <span>Bus stops</span>
